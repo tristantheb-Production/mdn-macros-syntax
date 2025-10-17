@@ -28,3 +28,11 @@ The plugin also provide a typo explainer when a macro is not recognized:
 ```md example-good
 {{Glossary("")}}
 ```
+
+### Quick fix macros
+
+When a macro is not recognized, a quick fix suggestion is provided to replace it with the correct macro name:
+
+![The error message on the hover tooltip](./docs/images/macros-quick-fix-error-example.png)
+
+![The quick fix suggestion menu when you click on the "Quick Fix" lightbulb](./docs/images/macros-quick-fix-menu-example.png)
