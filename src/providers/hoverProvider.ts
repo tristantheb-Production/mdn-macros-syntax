@@ -26,7 +26,7 @@ export const hoverProvider: vscode.HoverProvider = {
       try {
         const enKnown = getKnownMacros('en');
         enInfo = enKnown[found.name];
-      } catch (e) {
+      } catch {
         enInfo = undefined;
       }
     }
@@ -36,9 +36,9 @@ export const hoverProvider: vscode.HoverProvider = {
         const p = info.params[i];
         const allowed = p.allowedValues ? ` Allowed values: ${p.allowedValues.join(', ')}` : '';
         // prefer localized description, then English by name, then English by position
-        const descFromInfo = p.description || '';
-        const descFromEnByName = enInfo && enInfo.params ? (enInfo.params.find(ep => ep.name === p.name)?.description) : undefined;
-        const descFromEnByPos = enInfo && enInfo.params && enInfo.params[i] ? enInfo.params[i].description : undefined;
+        const descFromInfo: string = p.description || '';
+        const descFromEnByName: string | undefined = enInfo && enInfo.params ? (enInfo.params.find(ep => ep.name === p.name)?.description) : undefined;
+        const descFromEnByPos: string | undefined = enInfo && enInfo.params && enInfo.params[i] ? enInfo.params[i].description : undefined;
         const descText = descFromInfo || descFromEnByName || descFromEnByPos || '';
         const typeText = p.type || '';
         const optionalText = p.optional ? ' (optional)' : '';
@@ -47,7 +47,6 @@ export const hoverProvider: vscode.HoverProvider = {
     }
 
     const args = found.args.length ? `\n\nArguments: ${found.args.join(', ')}` : '';
-    const paramsSection = paramLines.length ? `\n\nParameter descriptions:\n${paramLines.join('\n')}` : '';
 
     // Build markdown text preserving existing pieces; description falls back to English if needed
     const descriptionText = info.description || (enInfo && enInfo.description) || '';
@@ -60,8 +59,9 @@ export const hoverProvider: vscode.HoverProvider = {
     }
 
     // Append deprecation note separated so it does not interfere with description/params
-    if ((info as any).deprecated) {
-      const deprecationText = typeof (info as any).deprecated === 'string' ? (info as any).deprecated : 'This macro is deprecated and should be removed from documentation.';
+    const deprecation = info.deprecated;
+    if (deprecation) {
+      const deprecationText = typeof deprecation === 'string' ? deprecation : 'This macro is deprecated and should be removed from documentation.';
       mdText += `\n\n---\n\n**DEPRECATED:** ${deprecationText}`;
     }
 

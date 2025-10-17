@@ -23,13 +23,13 @@ function buildDecorations(context: vscode.ExtensionContext) {
     const cfg = KEYWORD_CONFIG[k];
     const lightPath = vscode.Uri.file(path.join(context.extensionPath, 'resources', 'light', cfg.icon));
     const darkPath = vscode.Uri.file(path.join(context.extensionPath, 'resources', 'dark', cfg.icon));
-    const chosen = isDark ? darkPath : lightPath;
+    const chosen: vscode.Uri = isDark ? darkPath : lightPath;
 
     // background decoration (whole block) with top-right icon as backgroundImage
     const bgDeco = vscode.window.createTextEditorDecorationType({
       backgroundColor: cfg.color,
       isWholeLine: true,
-      backgroundImage: chosen as any,
+      backgroundImage: chosen.toString(),
       backgroundPosition: 'right top',
       backgroundSize: '16px 16px',
       backgroundRepeat: 'no-repeat'

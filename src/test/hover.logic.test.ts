@@ -4,7 +4,7 @@ import { getKnownMacros } from '../macros';
 
 describe('Hover logic (parser + loader)', () => {
   it('finds a macro and its localized description', () => {
-    const text = "Some text before {{HTMLElement(\"summary\", \"Label\")}} some after";
+    const text = 'Some text before {{HTMLElement("summary", "Label")}} some after';
     const startIndex = text.indexOf('{{HTMLElement');
     expect(startIndex).to.be.at.least(0);
     // choose an offset inside the macro name
@@ -19,7 +19,6 @@ describe('Hover logic (parser + loader)', () => {
     expect(info.description).to.be.a('string').and.to.contain('Insert or reference an HTML element');
 
     // Build param descriptions similar to hoverProvider to ensure they resolve
-    const localizedEntry = undefined;
     const localizedParamValues: string[] = [];
     const params = info.params || [];
     const paramLines: string[] = [];

@@ -16,18 +16,18 @@ function loadBaseMacros(): { [key: string]: Omit<MacroDefinition, 'description'>
   // Get definitions directory from possible locations
   try {
     if (fs.existsSync(repoDefs)) defsDir = repoDefs;
-  } catch (e) { /* ignore */ }
+  } catch { /* ignore */ }
 
   if (!defsDir) {
     try {
       if (fs.existsSync(upLevelSrcDefs)) defsDir = upLevelSrcDefs;
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
   }
 
   if (!defsDir) {
     try {
       if (fs.existsSync(packagedDefs)) defsDir = packagedDefs;
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
   }
 
   // Load macro definitions from JSON files in the definitions directory
@@ -47,15 +47,17 @@ function loadBaseMacros(): { [key: string]: Omit<MacroDefinition, 'description'>
           console.warn('[mdn-macros] invalid params in', f);
           continue;
         }
-        result[name] = parsed as any;
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : String(e);
+        const parsedObj = parsed as unknown as Omit<MacroDefinition, 'description'> & { descriptionKey?: string };
+        result[name] = parsedObj;
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
         console.log('[mdn-macros] failed to load macro definition', f, msg);
       }
     }
     console.log('[mdn-macros] loaded macro definitions from', defsDir, Object.keys(result).length);
-  } catch (e) {
-    console.log('[mdn-macros] error reading macro definitions', (e as any)?.message || String(e));
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.log('[mdn-macros] error reading macro definitions', msg);
   }
 
   return result;
@@ -92,7 +94,7 @@ function loadLocalizedDescriptions(lang: string): { [key: string]: LocalizedMacr
         const parsed = JSON.parse(raw) as { [key: string]: LocalizedMacroEntry };
         return parsed || {};
       }
-    } catch (e) {
+    } catch {
       // ignore parse/read errors for this candidate and try the next
     }
   }
@@ -125,10 +127,10 @@ export function getKnownMacros(locale?: string): { [key: string]: MacroDefinitio
     const params = base.params ? base.params.map((p): MacroParam => {
       const t = String(p.type);
       const allowed = ['string', 'number', 'string-number', 'boolean', 'enum'];
-      const type = allowed.includes(t) ? (t as any) : 'string';
+      const typeValue = allowed.includes(t) ? (t as ParamType) : 'string';
       return {
         name: p.name,
-        type: type as MacroParam['type'],
+        type: typeValue,
         optional: !!p.optional,
         allowedValues: p.allowedValues,
         description: undefined
