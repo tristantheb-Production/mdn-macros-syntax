@@ -1,5 +1,6 @@
 {
   "name": "mdn-macros-syntax",
+  "icon": "ressources/mms-icon.png",
   "displayName": "%displayName%",
   "description": "%description%",
   "publisher": "tristantheb",
