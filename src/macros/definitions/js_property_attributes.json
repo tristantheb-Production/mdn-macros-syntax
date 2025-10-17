@@ -1,0 +1,8 @@
+{
+  "descriptionKey": "js_property_attributes",
+  "params": [
+    { "name": "writable", "type": "boolean" },
+    { "name": "enumerable", "type": "boolean" },
+    { "name": "configurable", "type": "boolean" }
+  ]
+}
