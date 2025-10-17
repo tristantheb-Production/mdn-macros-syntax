@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "SVGElement",
+  "params": [
+    { "name": "element", "type": "string" }
+  ]
+}

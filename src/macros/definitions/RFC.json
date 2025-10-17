@@ -1,0 +1,8 @@
+{
+  "descriptionKey": "RFC",
+  "params": [
+    { "name": "number", "type": "string" },
+    { "name": "displayText", "type": "string", "optional": true },
+    { "name": "section", "type": "string", "optional": true }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "descriptionKey": "ListSubpages",
+  "params": [
+    { "name": "url", "type": "string", "optional": true },
+    { "name": "depth", "type": "string-number", "optional": true },
+    { "name": "reverse", "type": "boolean", "optional": true },
+    { "name": "ordered", "type": "boolean", "optional": true }
+  ]
+}

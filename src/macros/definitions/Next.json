@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "Next",
+  "params": [
+    { "name": "nextPage", "type": "string" }
+  ]
+}

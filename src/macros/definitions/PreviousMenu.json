@@ -1,0 +1,7 @@
+{
+  "descriptionKey": "PreviousMenu",
+  "params": [
+    { "name": "previousPage", "type": "string" },
+    { "name": "overviewPage", "type": "string" }
+  ]
+}

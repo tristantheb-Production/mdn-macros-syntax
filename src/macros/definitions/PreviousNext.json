@@ -1,0 +1,7 @@
+{
+  "descriptionKey": "PreviousNext",
+  "params": [
+    { "name": "previousPage", "type": "string" },
+    { "name": "nextPage", "type": "string" }
+  ]
+}

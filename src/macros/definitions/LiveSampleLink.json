@@ -1,0 +1,7 @@
+{
+  "descriptionKey": "LiveSampleLink",
+  "params": [
+    { "name": "anchorId", "type": "string" },
+    { "name": "displayText", "type": "string" }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "descriptionKey": "InteractiveExample",
+  "params": [
+    { "name": "title", "type": "string" },
+    { "name": "supportedHeight", "type": "enum", "optional": true, "allowedValues": ["shorter", "taller", "tabbed-shorter", "tabbed-standard", "tabbed-taller"] }
+  ]
+}

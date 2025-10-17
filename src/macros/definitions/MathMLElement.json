@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "MathMLElement",
+  "params": [
+    { "name": "tag", "type": "string" }
+  ]
+}

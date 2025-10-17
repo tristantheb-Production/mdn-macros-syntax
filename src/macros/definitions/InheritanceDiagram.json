@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "InheritanceDiagram",
+  "params": [
+    { "name": "apiName", "type": "string", "optional": true }
+  ]
+}

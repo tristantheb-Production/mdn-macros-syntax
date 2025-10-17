@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "WebExtExamples",
+  "params": [
+    { "name": "exampleName", "type": "string", "optional": true }
+  ]
+}

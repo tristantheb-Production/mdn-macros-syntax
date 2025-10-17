@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "SVGAttr",
+  "params": [
+    { "name": "attribute", "type": "string" }
+  ]
+}
