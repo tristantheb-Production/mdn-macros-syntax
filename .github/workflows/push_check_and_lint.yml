@@ -1,4 +1,4 @@
-name: Check and lint
+name: CD | Check and lint
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -6,8 +6,6 @@ concurrency:
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
 jobs:
@@ -46,13 +44,3 @@ jobs:
         run: npm run compile --if-present
       - name: Run tests & produce junit
         run: npm run test:ci
-
-      - name: Upload test results (if any)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: mocha-results
-          path: |
-            mocha-report.xml
-            test-results.xml
-          retention-days: 7
