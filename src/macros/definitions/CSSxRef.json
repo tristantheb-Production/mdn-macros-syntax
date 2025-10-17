@@ -1,0 +1,8 @@
+{
+  "descriptionKey": "CSSxRef",
+  "params": [
+    { "name": "property", "type": "string" },
+    { "name": "displayText", "type": "string", "optional": true },
+    { "name": "anchor", "type": "string", "optional": true }
+  ]
+}

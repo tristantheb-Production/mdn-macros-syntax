@@ -1,0 +1,7 @@
+{
+  "descriptionKey": "Glossary",
+  "params": [
+    { "name": "term", "type": "string" },
+    { "name": "translationOrRename", "type": "string", "optional": true }
+  ]
+}

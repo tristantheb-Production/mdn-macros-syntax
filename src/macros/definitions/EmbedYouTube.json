@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "EmbedYouTube",
+  "params": [
+    { "name": "youtubeVideoId", "type": "string" }
+  ]
+}

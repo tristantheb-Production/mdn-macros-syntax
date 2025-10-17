@@ -1,0 +1,8 @@
+{
+  "descriptionKey": "EmbedLiveSample",
+  "params": [
+    { "name": "exampleTitle", "type": "string" },
+    { "name": "width", "type": "string-number", "optional": true },
+    { "name": "height", "type": "string-number", "optional": true }
+  ]
+}

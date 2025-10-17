@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "CSP",
+  "params": [
+    { "name": "contentSecurityPolicy", "type": "string" }
+  ]
+}

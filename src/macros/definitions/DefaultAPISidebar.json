@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "DefaultAPISidebar",
+  "params": [
+    { "name": "apiName", "type": "string" }
+  ]
+}
