@@ -1,7 +1,7 @@
 {
   "descriptionKey": "HTMLElement",
   "params": [
-    { "name": "tag", "type": "string" },
+    { "name": "element", "type": "string" },
     { "name": "displayText", "type": "string", "optional": true },
     { "name": "anchor", "type": "string", "optional": true }
   ]
