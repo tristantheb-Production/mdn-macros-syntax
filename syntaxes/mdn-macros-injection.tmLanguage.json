@@ -1,0 +1,50 @@
+{
+  "scopeName": "source.mdn-macros-injection",
+  "name": "MDN Macros Injection",
+  "injectionSelector": "L:text.html.markdown",
+  "patterns": [
+    {
+      "begin": "(\\{\\{)\\s*([A-Za-z0-9_-]+)\\s*(\\()",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.macro.begin" },
+        "2": { "name": "entity.name.function" },
+        "3": { "name": "punctuation.section.parameters.begin" }
+      },
+      "end": "(\\))\\s*(\\}\\})",
+      "endCaptures": {
+        "1": { "name": "punctuation.section.parameters.end" },
+        "2": { "name": "punctuation.definition.macro.end" }
+      },
+      "name": "meta.macro.mdn",
+      "patterns": [
+        {
+          "name": "string.quoted.double",
+          "match": "\\\"(?:\\\\.|[^\\\"\\\\])*\\\""
+        },
+        {
+          "name": "string.quoted.single",
+          "match": "'(?:\\\\'|[^'\\\\])*'"
+        },
+        {
+          "name": "constant.numeric",
+          "match": "\\b\\d+(?:\\.\\d+)?\\b"
+        },
+        {
+          "name": "constant.language.boolean",
+          "match": "\\b(?:true|false)\\b"
+        },
+        {
+          "name": "punctuation.separator.comma",
+          "match": ","
+        },
+        {
+          "name": "comment.argument.empty",
+          "match": "(?<=,|\\()\\s*(?=,|\\))"
+        }
+      ]
+    }
+  ],
+  "repository": {},
+  "scopeMetadata": {},
+  "version": "0.0.0"
+}
