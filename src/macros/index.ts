@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { MacroDefinition, BaseMacroJSON, LocalizedMacroEntry, MacroParam } from '@/types/macro';
+import { MacroDefinition, BaseMacroJSON, LocalizedMacroEntry, MacroParam } from '../types/macro';
 
 /**
  * Load base macro definitions from JSON files.
