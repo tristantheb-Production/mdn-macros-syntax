@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.1](https://github.com/tristantheb-Production/mdn-macros-syntax/compare/v0.1.0...v0.1.1) (2025-10-17)
+
+
+### Bug Fixes
+
+* **ci:** set permissions ([4ab51bc](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/4ab51bc5ae4ec794665e7fb69aefc1283c7822a1))
+* missing extension icon ([ce6919e](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/ce6919e1e8e6d2236ce64f51cd889bb45d1c8fd4))
+* **package:** wrong repository uri ([8f16364](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/8f16364b833368d3613cdc0ae0efc8f0ef98ca59))
+
 ## [0.1.0](https://github.com/tristantheb-Production/mdn-macros-syntax/compare/v0.0.1...v0.1.0) (2025-10-17)
 
 
