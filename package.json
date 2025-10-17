@@ -1,0 +1,69 @@
+{
+  "name": "mdn-macros-syntax",
+  "displayName": "%displayName%",
+  "description": "%description%",
+  "publisher": "tristantheb",
+  "version": "0.0.0",
+  "engines": {
+    "vscode": "^1.105.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tristantheb/mdn-macros-syntax.git"
+  },
+  "homepage": "https://github.com/tristantheb/mdn-macros-syntax",
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "mdn-macros",
+        "aliases": [
+          "MDN Macros",
+          "mdn-macros"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.mdn-macros-injection",
+        "path": "./syntaxes/mdn-macros-injection.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "mdn-macros",
+        "path": "./snippets/mdn-macros.code-snippets"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "lint": "eslint 'src/**/*.ts' --ext .ts",
+    "lint:fix": "eslint 'src/**/*.ts' --ext .ts --fix",
+    "test": "mocha -r ts-node/register \"src/test/**/*.test.ts\" --exit",
+    "test:ci": "mocha -r ts-node/register \"src/test/**/*.test.ts\" --reporter mocha-junit-reporter --reporter-options mochaFile=mocha-report.xml",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.8.1",
+    "@types/vscode": "^1.105.0",
+    "@typescript-eslint/parser": "^8.46.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "chai": "^6.2.0",
+    "eslint": "^9.37.0",
+    "mocha": "^11.7.4",
+    "mocha-junit-reporter": "^2.0.0",
+    "ts-node": "^10.9.2",
+    "tslint": "^6.1.3",
+    "typescript": "^5.9.3"
+  }
+}
