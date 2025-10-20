@@ -94,9 +94,7 @@ function loadLocalizedDescriptions(lang: string): { [key: string]: LocalizedMacr
         const parsed = JSON.parse(raw) as { [key: string]: LocalizedMacroEntry };
         return parsed || {};
       }
-    } catch {
-      // ignore parse/read errors for this candidate and try the next
-    }
+    } catch { /* ignore */ }
   }
 
   return {};
