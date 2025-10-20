@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { parseMacroAtOffset } from '../utils/parse';
 import { getKnownMacros } from '../macros';
-import { levenshtein } from '../utils/levenshtein';
 
 export const hoverProvider: vscode.HoverProvider = {
   provideHover(document: vscode.TextDocument, position: vscode.Position) {
@@ -12,24 +11,6 @@ export const hoverProvider: vscode.HoverProvider = {
     const KNOWN_MACROS = getKnownMacros(locale);
     const info = KNOWN_MACROS[found.name];
     if (!info) {
-      // If macro not known, try to suggest the closest known macro name
-      const known = Object.keys(getKnownMacros(locale));
-      let best: { name: string; dist: number } | undefined;
-      for (const k of known) {
-        const d = levenshtein(found.name, k);
-        if (!best || d < best.dist) best = { name: k, dist: d };
-      }
-      if (best && best.dist <= Math.max(1, Math.floor(found.name.length / 3))) {
-        try {
-          const cmdPayload = JSON.stringify([document.uri.toString(), found.start, found.end, best.name]);
-          const cmdUri = `command:mdn-macros.replaceMacroName?${encodeURIComponent(cmdPayload)}`;
-          const md = new vscode.MarkdownString(`Unknown macro **${found.name}**\n\n_Did you mean_ **${best.name}** — [Replace](${cmdUri})`);
-          md.isTrusted = true;
-          return new vscode.Hover(md);
-        } catch {
-          return new vscode.Hover(new vscode.MarkdownString(`Unknown macro **${found.name}**`));
-        }
-      }
       return new vscode.Hover(new vscode.MarkdownString(`Unknown macro **${found.name}**`));
     }
 
