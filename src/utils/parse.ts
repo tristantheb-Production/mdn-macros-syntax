@@ -1,4 +1,4 @@
-import { makeMacroRegex } from './constants';
+import { makeMacroRegex } from './constants'
 
 /**
  * Result of parsing a macro occurrence inside text.
@@ -16,13 +16,13 @@ interface MacroParseResult {
  */
 function stripMatchingQuotes(s: string): string {
   if (s.length >= 2) {
-    const first = s[0];
-    const last = s[s.length - 1];
-    if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
-      return s.substring(1, s.length - 1).trim();
+    const first = s[0]
+    const last = s[s.length - 1]
+    if ((first === '"' && last === '"') || (first === '\'' && last === '\'')) {
+      return s.substring(1, s.length - 1).trim()
     }
   }
-  return s.trim();
+  return s.trim()
 }
 
 /**
@@ -31,41 +31,41 @@ function stripMatchingQuotes(s: string): string {
  * Returns array of argument strings with surrounding quotes removed when present.
  */
 export function splitArgsPreserveEmpty(rawArgs: string): string[] {
-  if (!rawArgs || rawArgs.length === 0) return [];
-  const result: string[] = [];
-  let current = '';
-  let inSingle = false;
-  let inDouble = false;
+  if (!rawArgs || rawArgs.length === 0) return []
+  const result: string[] = []
+  let current = ''
+  let inSingle = false
+  let inDouble = false
 
   for (let i = 0; i < rawArgs.length; i++) {
-    const ch = rawArgs[i];
+    const ch = rawArgs[i]
 
-    if (ch === "'" && !inDouble) {
-      inSingle = !inSingle;
-      current += ch;
-      continue;
+    if (ch === '\'' && !inDouble) {
+      inSingle = !inSingle
+      current += ch
+      continue
     }
 
     if (ch === '"' && !inSingle) {
-      inDouble = !inDouble;
-      current += ch;
-      continue;
+      inDouble = !inDouble
+      current += ch
+      continue
     }
 
     if (ch === ',' && !inSingle && !inDouble) {
-      result.push(current.trim());
-      current = '';
-      continue;
+      result.push(current.trim())
+      current = ''
+      continue
     }
 
-    current += ch;
+    current += ch
   }
 
   // push last entry (may be empty string)
-  result.push(current.trim());
+  result.push(current.trim())
 
   // strip matching quotes from each argument
-  return result.map(stripMatchingQuotes);
+  return result.map(stripMatchingQuotes)
 }
 
 /**
@@ -73,18 +73,18 @@ export function splitArgsPreserveEmpty(rawArgs: string): string[] {
  * Returns undefined when no macro is found at the offset.
  */
 export function parseMacroAtOffset(text: string, offset: number): MacroParseResult | undefined {
-  const macroRegex = makeMacroRegex();
-  let match: RegExpExecArray | null;
+  const macroRegex = makeMacroRegex()
+  let match: RegExpExecArray | null
 
   while ((match = macroRegex.exec(text)) !== null) {
-    const start = match.index;
-    const end = match.index + match[0].length;
+    const start = match.index
+    const end = match.index + match[0].length
     if (offset >= start && offset <= end) {
-      const rawArgs = match[2] || '';
-      const args = rawArgs.trim().length ? splitArgsPreserveEmpty(rawArgs) : [];
-      return { name: match[1], args, start, end };
+      const rawArgs = match[2] || ''
+      const args = rawArgs.trim().length ? splitArgsPreserveEmpty(rawArgs) : []
+      return { name: match[1], args, start, end }
     }
   }
 
-  return undefined;
+  return undefined
 }
