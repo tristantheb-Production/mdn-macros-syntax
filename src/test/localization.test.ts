@@ -9,10 +9,10 @@ describe('Localization loader', () => {
     expect(info).to.be.ok
     // description should come from src/locales/macros.nls.json
     expect(info.description).to.be.a('string').and.to.contain('Insert or reference an HTML element')
-    // params should include 'tag' with a description
+
     expect(info.params).to.be.an('array')
-    const tagParam = info.params!.find(p => p.name === 'tag')
+    const tagParam = info.params!.find(p => ['element'].includes(p.name))
     expect(tagParam).to.exist
-    expect(tagParam!.description).to.be.a('string').and.to.contain('The HTML tag name')
+    expect(tagParam!.description).to.be.a('string').and.to.contain('The HTML element name')
   })
 })

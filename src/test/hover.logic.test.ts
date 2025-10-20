@@ -33,8 +33,8 @@ describe('Hover logic (parser + loader)', () => {
     })
 
     expect(paramLines.length).to.be.greaterThan(0)
-    const tagLine = paramLines.find(l => l.startsWith('tag'))
+    const tagLine = paramLines.find(l => l.startsWith('element'))
     expect(tagLine).to.exist
-    expect(tagLine).to.contain('The HTML tag name')
+    expect(tagLine).to.contain('The HTML element name')
   })
 })
