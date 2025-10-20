@@ -41,7 +41,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mocha-results
+          name: mocha-results-${{ github.run_id }}-${{ matrix.os }}-${{ matrix.node-version }}
           path: |
             mocha-report.xml
             test-results.xml
