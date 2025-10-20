@@ -1,0 +1,48 @@
+name: CD | Check pull request
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ "ubuntu-22.04", "ubuntu-24.04", "windows-2019", "windows-2022", "macos-14" ]
+        node-version: [ "22.x", "24.x" ]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          package-manager-cache: false
+      - run: npm install
+
+      - name: Compile
+        run: npm run compile --if-present
+      - name: Run tests & produce junit
+        run: npm run test:ci
+
+      - name: Upload test results (if any)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mocha-results
+          path: |
+            mocha-report.xml
+            test-results.xml
+          retention-days: 7
