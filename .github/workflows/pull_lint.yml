@@ -1,0 +1,42 @@
+name: CD | Check and lint
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ "ubuntu-24.04" ]
+        node-version: [ "22.x" ]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          package-manager-cache: false
+      - run: npm install
+
+      - name: Install reviewdog
+        uses: reviewdog/action-setup@v1
+
+      - name: Run ESLint and post with reviewdog (if ESLint configured)
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx eslint "src/**/*.ts" -f unix 2>&1 | reviewdog -f=eslint -name=eslint -reporter=github-pr-review -filter-mode=nofilter -fail-on-error=false -level=warning
