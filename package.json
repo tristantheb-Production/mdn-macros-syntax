@@ -1,26 +1,39 @@
 {
   "name": "mdn-macros-syntax",
-  "icon": "resources/mms-icon.png",
   "displayName": "%displayName%",
-  "description": "%description%",
-  "publisher": "tristantheb",
   "version": "0.1.1",
+  "publisher": "tristantheb",
+  "description": "%description%",
+  "keywords": [
+    "MDN",
+    "MDN Web Docs",
+    "documentation",
+    "macros",
+    "markdown"
+  ],
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Other"
+  ],
+  "icon": "resources/mms-icon.png",
+  "pricing": "Free",
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
   "engines": {
     "vscode": "^1.105.0"
   },
+  "main": "./out/extension.js",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/tristantheb-Production/mdn-macros-syntax.git"
   },
-  "homepage": "https://github.com/tristantheb-Production/mdn-macros-syntax",
-  "categories": [
-    "Programming Languages",
-    "Snippets"
-  ],
-  "activationEvents": [
-    "onLanguage:markdown"
-  ],
-  "main": "./out/extension.js",
+  "bugs": {
+    "url": "https://github.com/tristantheb-Production/mdn-macros-syntax/issues/new?template=bug-report.md"
+  },
+  "homepage": "https://github.com/tristantheb-Production/mdn-macros-syntax/blob/main/README.md",
   "contributes": {
     "languages": [
       {
@@ -33,8 +46,8 @@
     ],
     "grammars": [
       {
-        "scopeName": "source.mdn-macros-injection",
-        "path": "./syntaxes/mdn-macros-injection.tmLanguage.json"
+        "scopeName": "source.mdn-macros",
+        "path": "./syntaxes/mdn-macros.tmLanguage.json"
       }
     ],
     "snippets": [
@@ -46,21 +59,22 @@
   },
   "scripts": {
     "compile": "tsc -p ./",
-    "lint": "eslint 'src/**/*.ts' --ext .ts",
-    "lint:fix": "eslint 'src/**/*.ts' --ext .ts --fix",
+  "lint": "eslint src --ext .ts",
+  "lint:fix": "eslint src --ext .ts --fix",
     "test": "mocha -r ts-node/register \"src/test/**/*.test.ts\" --exit",
     "test:ci": "mocha -r ts-node/register -r tsconfig-paths/register \"src/test/**/*.test.ts\" --reporter mocha-junit-reporter --reporter-options mochaFile=mocha-report.xml",
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.5.0",
     "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.8.1",
     "@types/vscode": "^1.105.0",
-    "@typescript-eslint/parser": "^8.46.1",
     "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/parser": "^8.46.1",
     "chai": "^6.2.0",
-    "eslint": "^9.37.0",
+    "eslint": "^9.38.0",
     "mocha": "^11.7.4",
     "mocha-junit-reporter": "^2.2.1",
     "ts-node": "^10.9.2",
