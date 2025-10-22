@@ -28,10 +28,30 @@ module.exports = [
     },
     rules: {
       'comma-dangle': ['error', 'never'],
+      '@stylistic/arrow-spacing': 'error',
+      '@stylistic/block-spacing': 'error',
+      '@stylistic/comma-spacing': ['error', {
+        'before': false,
+        'after': true
+      }],
       '@stylistic/eol-last': ['error', 'always'],
       '@stylistic/indent': ['error', 2],
+      '@stylistic/key-spacing': ['error', {
+        'beforeColon': false,
+        'afterColon': true
+      }],
+      '@stylistic/keyword-spacing': ['error', {
+        'before': true,
+        'after': true
+      }],
+      '@stylistic/no-multi-spaces': 'error',
+      '@stylistic/no-trailing-spaces': 'error',
       '@stylistic/quotes': ['error', 'single'],
       '@stylistic/semi': ['error', 'never'],
+      '@stylistic/space-before-blocks': 'error',
+      '@stylistic/space-in-parens': ['error', 'never'],
+      '@stylistic/switch-colon-spacing': 'error',
+      '@stylistic/type-named-tuple-spacing': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error', { 'argsIgnorePattern': '^_' }
