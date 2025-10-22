@@ -30,7 +30,7 @@ function stripMatchingQuotes(s: string): string {
  * Handles quoted strings and ignores commas inside quotes.
  * Returns array of argument strings with surrounding quotes removed when present.
  */
-export function splitArgsPreserveEmpty(rawArgs: string): string[] {
+function splitArgsPreserveEmpty(rawArgs: string): string[] {
   if (!rawArgs || rawArgs.length === 0) return []
   const result: string[] = []
   let current = ''
@@ -72,7 +72,7 @@ export function splitArgsPreserveEmpty(rawArgs: string): string[] {
  * Find a macro that contains the given offset and return its parsed name/args and positions.
  * Returns undefined when no macro is found at the offset.
  */
-export function parseMacroAtOffset(text: string, offset: number): MacroParseResult | undefined {
+function parseMacroAtOffset(text: string, offset: number): MacroParseResult | undefined {
   const macroRegex = makeMacroRegex()
   let match: RegExpExecArray | null
 
@@ -88,3 +88,5 @@ export function parseMacroAtOffset(text: string, offset: number): MacroParseResu
 
   return undefined
 }
+
+export { splitArgsPreserveEmpty, parseMacroAtOffset }
