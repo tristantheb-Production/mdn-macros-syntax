@@ -1,10 +1,10 @@
 import * as vscode from 'vscode'
+import { activateAllDecorations } from './components/BlockDecorations'
 import { hoverProvider } from './providers/hoverProvider'
 import { completionProvider } from './providers/completionProvider'
 import { computeDiagnostics } from './providers/diagnosticProvider'
 import { codeActionProvider } from './providers/codeActionProvider'
 import { provider as semanticProvider, legend as semanticLegend } from './providers/semanticTokensProvider'
-import { activateBlockDecorations } from './providers/blockDecorations'
 import { activateDeprecatedMarker } from './providers/deprecatedMarker'
 import { registerHooks } from './hooks/activation'
 
@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerDocumentSemanticTokensProvider({ language: 'markdown' }, semanticProvider, semanticLegend))
 
   // Activate block decorations (icons + background for fenced code blocks)
-  activateBlockDecorations(context)
+  activateAllDecorations(context)
   // Activate deprecated markers
   activateDeprecatedMarker(context)
 
