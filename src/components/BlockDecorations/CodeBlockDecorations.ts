@@ -1,85 +1,92 @@
 import * as vscode from 'vscode'
 import { join as pathJoin } from 'path'
+import { Decoration } from './Decoration'
 
-// Keywords mapping to icon filenames and background colors
-const KEYWORD_CONFIG: { [key: string]: { icon: string; color: string } } = {
-  'example-good': { icon: 'check.svg', color: 'rgba(76 175 80 / 12%)' },
-  'example-bad': { icon: 'x.svg', color: 'rgba(244 67 54 / 12%)' },
-  'interactive-example': { icon: 'console.svg', color: 'rgba(33 150 243 / 12%)' }
-}
-
-/**
- * Build decoration types for code blocks, using the current color theme.
- * Returns an object with background and icon decorations for each keyword.
- */
-function getCodeBlockDecorations(context: vscode.ExtensionContext) {
-  const decorationsBg: { [k: string]: vscode.TextEditorDecorationType } = {}
-  const decorationsIcon: { [k: string]: vscode.TextEditorDecorationType } = {}
-
-  const isDark = vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Dark
-    || vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.HighContrast
-
-  for (const k of Object.keys(KEYWORD_CONFIG)) {
-    const cfg = KEYWORD_CONFIG[k]
-    const lightPath = vscode.Uri.file(pathJoin(context.extensionPath, 'resources', 'light', cfg.icon))
-    const darkPath = vscode.Uri.file(pathJoin(context.extensionPath, 'resources', 'dark', cfg.icon))
-    const chosen: vscode.Uri = isDark ? darkPath : lightPath
-
-    // Background decoration (whole block)
-    decorationsBg[k] = vscode.window.createTextEditorDecorationType({
-      backgroundColor: cfg.color,
-      isWholeLine: true
-    })
-
-    // Icon decoration for the opening fence line only (gutter icon)
-    decorationsIcon[k] = vscode.window.createTextEditorDecorationType({
-      gutterIconPath: chosen,
-      gutterIconSize: '16px'
-    })
+class CodeBlockDecorations extends Decoration {
+  // Keywords mapping to icon filenames and background colors
+  KEYWORD_CONFIG: { [key: string]: { icon: string; color: string } } = {
+    'example-good': { icon: 'check.svg', color: 'rgb(76 175 80 / 12%)' },
+    'example-bad': { icon: 'x.svg', color: 'rgb(244 67 54 / 12%)' },
+    'interactive-example': { icon: 'console.svg', color: 'rgb(33 150 243 / 12%)' }
   }
 
-  return { decorationsBg, decorationsIcon }
-}
+  getDecorations(context: vscode.ExtensionContext): { [k: string]: vscode.TextEditorDecorationType } {
+    const decorations: { [k: string]: vscode.TextEditorDecorationType } = {}
+    const isDark = vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Dark
+      || vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.HighContrast
 
-/**
- * Detects the ranges to decorate for each keyword in a given document.
- * Returns { [keyword]: { bg: vscode.Range[], icon: vscode.Range[] } }
- */
-function findCodeBlockRanges(doc: vscode.TextDocument): { [k: string]: { bg: vscode.Range[], icon: vscode.Range[] } } {
-  const result: { [k: string]: { bg: vscode.Range[], icon: vscode.Range[] } } = {}
-  for (const k of Object.keys(KEYWORD_CONFIG)) {
-    result[k] = { bg: [], icon: [] }
-  }
-  const lineCount = doc.lineCount
-  let line = 0
-  while (line < lineCount) {
-    const textLine = doc.lineAt(line).text
-    if (textLine.trim().startsWith('```')) {
-      const infoString = textLine.trim().substring(3).trim()
-      // Find the end of the code block
-      let endLine = line + 1
-      while (endLine < lineCount && !doc.lineAt(endLine).text.trim().startsWith('```')) {
-        endLine++
+    for (const k of Object.keys(this.KEYWORD_CONFIG)) {
+      const cfg = this.KEYWORD_CONFIG[k]
+      const lightPath = vscode.Uri.file(pathJoin(context.extensionPath, 'resources', 'light', cfg.icon))
+      const darkPath = vscode.Uri.file(pathJoin(context.extensionPath, 'resources', 'dark', cfg.icon))
+      const chosen: vscode.Uri = isDark ? darkPath : lightPath
+
+      // Only add background if color is defined
+      if (cfg.color) {
+        decorations[`${k}-bg`] = vscode.window.createTextEditorDecorationType({
+          backgroundColor: cfg.color,
+          isWholeLine: true
+        })
       }
-      if (endLine < lineCount) {
-        const blockRange = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(endLine, doc.lineAt(endLine).text.length))
-        const iconRange = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(line, 0))
-        const parts = infoString.split(/\s+/).map(p => p.trim()).filter(Boolean)
-        for (const part of parts) {
-          const key = part.toLowerCase()
-          if (result[key]) {
-            result[key].bg.push(blockRange)
-            result[key].icon.push(iconRange)
-            break
+      // Only add icon if icon is defined
+      if (cfg.icon) {
+        decorations[`${k}-icon`] = vscode.window.createTextEditorDecorationType({
+          gutterIconPath: chosen,
+          gutterIconSize: '16px'
+        })
+      }
+    }
+    return decorations
+  }
+
+  findRanges(doc: vscode.TextDocument): { [k: string]: vscode.Range[] } {
+    const result: { [k: string]: vscode.Range[] } = {}
+    const lineCount = doc.lineCount
+    let line = 0
+    while (line < lineCount) {
+      const textLine = doc.lineAt(line).text
+      if (textLine.trim().startsWith('```')) {
+        const infoString = textLine.trim().substring(3).trim()
+        // Find the end of the code block
+        let endLine = line + 1
+        while (endLine < lineCount && !doc.lineAt(endLine).text.trim().startsWith('```')) {
+          endLine++
+        }
+        if (endLine < lineCount) {
+          const blockRange = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(endLine, doc.lineAt(endLine).text.length))
+          const iconRange = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(line, 0))
+          const parts = infoString.split(/\s+/).map(p => p.trim()).filter(Boolean)
+          for (const part of parts) {
+            const key = part.toLowerCase()
+            if (this.KEYWORD_CONFIG[key]) {
+              if (this.KEYWORD_CONFIG[key].color) {
+                const bgKey = `${key}-bg`
+                if (!result[bgKey]) result[bgKey] = []
+                result[bgKey].push(blockRange)
+              }
+              if (this.KEYWORD_CONFIG[key].icon) {
+                const iconKey = `${key}-icon`
+                if (!result[iconKey]) result[iconKey] = []
+                result[iconKey].push(iconRange)
+              }
+              break
+            }
           }
         }
+        line = endLine + 1
+      } else {
+        line++
       }
-      line = endLine + 1
-    } else {
-      line++
     }
+    return result
   }
-  return result
 }
 
-export { findCodeBlockRanges, getCodeBlockDecorations }
+const codeBlockDecorationsInstance = new CodeBlockDecorations()
+const codeBlockDecorator = {
+  id: 'code-block',
+  getDecorations: (context: vscode.ExtensionContext) => codeBlockDecorationsInstance.getDecorations(context),
+  findRanges: (doc: vscode.TextDocument) => codeBlockDecorationsInstance.findRanges(doc)
+}
+
+export { codeBlockDecorator }
