@@ -12,7 +12,7 @@ function activateAllDecorations(context: ExtensionContext) {
   let decoratorInstances = BLOCK_DECORATORS.map(
     decorator => ({
       decorations: decorator.getDecorations(context),
-      findRanges: decorator.findRanges
+      findRanges: decorator.findRanges.bind(decorator)
     })
   )
 
@@ -33,7 +33,7 @@ function activateAllDecorations(context: ExtensionContext) {
       const ranges = decorator.findRanges(doc)
       const decorations = decorator.decorations
       for (const k of Object.keys(decorations)) {
-        editor.setDecorations(decorations[k], ranges[k] || [])
+        editor.setDecorations(decorations[k], (ranges && ranges[k]) ? ranges[k] : [])
       }
     }
   }
