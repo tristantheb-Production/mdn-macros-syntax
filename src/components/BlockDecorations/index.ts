@@ -1,11 +1,11 @@
 import { window, workspace, type ExtensionContext, type TextEditor, TextEditorDecorationType } from 'vscode'
-import { CodeBlockDecorations } from './CodeBlockDecorations'
-import { FrontMatterDecorations } from './FrontMatterDecorations'
+import { CodeBlockDecorationsComponent } from './CodeBlockDecorationsComponent'
+import { FrontMatterDecorationsComponent } from './FrontMatterDecorationsComponent'
 
 // List of all block decorators (add more as needed)
 const BLOCK_DECORATORS = [
-  new CodeBlockDecorations(),
-  new FrontMatterDecorations()
+  new CodeBlockDecorationsComponent(),
+  new FrontMatterDecorationsComponent()
 ]
 
 function activateAllDecorations(context: ExtensionContext) {

@@ -1,11 +1,11 @@
 import * as vscode from 'vscode'
 import { activateAllDecorations } from './components/BlockDecorations'
 import { activateAllHovers } from './components/Hovers'
+import { activateAllMarkers } from './components/Markers'
 import { completionProvider } from './providers/completionProvider'
 import { computeDiagnostics } from './providers/diagnosticProvider'
 import { codeActionProvider } from './providers/codeActionProvider'
 import { provider as semanticProvider, legend as semanticLegend } from './providers/semanticTokensProvider'
-import { activateDeprecatedMarker } from './providers/deprecatedMarker'
 import { registerHooks } from './hooks/activation'
 
 let diagnosticCollection: vscode.DiagnosticCollection | undefined
@@ -22,8 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Activate block decorations (icons + background for fenced code blocks)
   activateAllDecorations(context)
-  // Activate deprecated markers
-  activateDeprecatedMarker(context)
+  // Activate markers (deprecated marker moved to component)
+  activateAllMarkers(context)
 
   function refreshDiagnostics(document: vscode.TextDocument) {
     const diags = computeDiagnostics(document)

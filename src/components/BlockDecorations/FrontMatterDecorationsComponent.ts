@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
-import { Decoration } from './Decoration'
+import { DecorationComponent } from './DecorationComponent'
 
-class FrontMatterDecorations extends Decoration {
+class FrontMatterDecorationsComponent extends DecorationComponent {
   getDecorations(): { [k: string]: vscode.TextEditorDecorationType } {
     const isDark = vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Dark
       || vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.HighContrast
@@ -40,4 +40,4 @@ class FrontMatterDecorations extends Decoration {
   }
 }
 
-export { FrontMatterDecorations }
+export { FrontMatterDecorationsComponent }

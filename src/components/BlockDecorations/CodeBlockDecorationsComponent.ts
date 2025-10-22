@@ -1,8 +1,8 @@
 import * as vscode from 'vscode'
 import { join as pathJoin } from 'path'
-import { Decoration } from './Decoration'
+import { DecorationComponent } from './DecorationComponent'
 
-class CodeBlockDecorations extends Decoration {
+class CodeBlockDecorationsComponent extends DecorationComponent {
   // Keywords mapping to icon filenames and background colors
   KEYWORD_CONFIG: { [key: string]: { icon: string; color: string } } = {
     'example-good': { icon: 'check.svg', color: 'rgb(76 175 80 / 12%)' },
@@ -82,4 +82,4 @@ class CodeBlockDecorations extends Decoration {
   }
 }
 
-export { CodeBlockDecorations }
+export { CodeBlockDecorationsComponent }
