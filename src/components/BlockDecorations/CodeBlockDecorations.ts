@@ -82,11 +82,4 @@ class CodeBlockDecorations extends Decoration {
   }
 }
 
-const codeBlockDecorationsInstance = new CodeBlockDecorations()
-const codeBlockDecorator = {
-  id: 'code-block',
-  getDecorations: (context: vscode.ExtensionContext) => codeBlockDecorationsInstance.getDecorations(context),
-  findRanges: (doc: vscode.TextDocument) => codeBlockDecorationsInstance.findRanges(doc)
-}
-
-export { codeBlockDecorator }
+export { CodeBlockDecorations }

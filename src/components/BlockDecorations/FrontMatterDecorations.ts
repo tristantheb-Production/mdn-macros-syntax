@@ -40,11 +40,4 @@ class FrontMatterDecorations extends Decoration {
   }
 }
 
-const frontMatterDecorationsInstance = new FrontMatterDecorations()
-const frontMatterDecorator = {
-  id: 'front-matter',
-  getDecorations: () => frontMatterDecorationsInstance.getDecorations(),
-  findRanges: (doc: vscode.TextDocument) => frontMatterDecorationsInstance.findRanges(doc)
-}
-
-export { frontMatterDecorator }
+export { FrontMatterDecorations }
