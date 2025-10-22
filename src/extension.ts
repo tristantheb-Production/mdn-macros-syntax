@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { activateAllDecorations } from './components/BlockDecorations'
-import { hoverProvider } from './providers/hoverProvider'
+import { activateAllHovers } from './components/Hovers'
 import { completionProvider } from './providers/completionProvider'
 import { computeDiagnostics } from './providers/diagnosticProvider'
 import { codeActionProvider } from './providers/codeActionProvider'
@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
   diagnosticCollection = vscode.languages.createDiagnosticCollection('mdn-macros')
   context.subscriptions.push(diagnosticCollection)
 
-  context.subscriptions.push(vscode.languages.registerHoverProvider(['mdn-macros', 'markdown'], hoverProvider))
+  activateAllHovers(context)
   context.subscriptions.push(vscode.languages.registerCompletionItemProvider(['mdn-macros', 'markdown'], completionProvider, '{'))
   context.subscriptions.push(vscode.languages.registerCodeActionsProvider(['mdn-macros', 'markdown'], codeActionProvider, { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }))
 
