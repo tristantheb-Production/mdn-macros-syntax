@@ -1,7 +1,7 @@
 {
   "name": "mdn-macros-syntax",
   "displayName": "%displayName%",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "tristantheb",
   "description": "%description%",
   "keywords": [
@@ -44,8 +44,8 @@
   },
   "scripts": {
     "compile": "tsc -p ./",
-  "lint": "eslint src --ext .ts",
-  "lint:fix": "eslint src --ext .ts --fix",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
     "test": "mocha -r ts-node/register \"src/test/**/*.test.ts\" --exit",
     "test:ci": "mocha -r ts-node/register -r tsconfig-paths/register \"src/test/**/*.test.ts\" --reporter mocha-junit-reporter --reporter-options mochaFile=mocha-report.xml",
     "watch": "tsc -watch -p ./"

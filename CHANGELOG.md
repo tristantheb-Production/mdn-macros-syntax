@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.2.0](https://github.com/tristantheb-Production/mdn-macros-syntax/compare/v0.1.1...v0.2.0) (2025-10-23)
+
+
+### Features
+
+* **component:** implementation of the hash commit update ([#10](https://github.com/tristantheb-Production/mdn-macros-syntax/issues/10)) ([6c41624](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/6c416248fbdec46b46525cd1c8c0d2bc8dbb3218))
+
+
+### Enhancements
+
+* **components:** move elements of providers as components ([#8](https://github.com/tristantheb-Production/mdn-macros-syntax/issues/8)) ([fc49e43](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/fc49e43ffd5353af7c4a4ad280cdaa2caa96b846))
+* improve extension loading to detect repository ([#9](https://github.com/tristantheb-Production/mdn-macros-syntax/issues/9)) ([5a90319](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/5a90319187272c3a4e57a4ba7ef5a509241dae71))
+* **linter:** change eslint rules ([#11](https://github.com/tristantheb-Production/mdn-macros-syntax/issues/11)) ([f9c9a06](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/f9c9a06f1f1f73900bcd9bccdff7c8f38713a249))
+* linting all files and cleaning code ([#4](https://github.com/tristantheb-Production/mdn-macros-syntax/issues/4)) ([72e07d1](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/72e07d1cdced7394c8971b7b8c890e4f5b8e70b8))
+
+
+### Bug Fixes
+
+* github action fail need to be separated ([#5](https://github.com/tristantheb-Production/mdn-macros-syntax/issues/5)) ([953bfa1](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/953bfa1040f90819999ab8f63fcfc7665b1bc13a))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump eslint from 9.37.0 to 9.38.0 in the development-dependencies group ([#7](https://github.com/tristantheb-Production/mdn-macros-syntax/issues/7)) ([5ee8f48](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/5ee8f4874088301412c5e679dcb70fded5568e85))
+* **deps-dev:** bump eslint in the development-dependencies group ([5ee8f48](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/5ee8f4874088301412c5e679dcb70fded5568e85))
+* updating readme with new hash component ([#12](https://github.com/tristantheb-Production/mdn-macros-syntax/issues/12)) ([dea3c3e](https://github.com/tristantheb-Production/mdn-macros-syntax/commit/dea3c3e53c31413ecfbc6837ce5ec5d0edd69de1))
+
 ## [0.1.1](https://github.com/tristantheb-Production/mdn-macros-syntax/compare/v0.1.0...v0.1.1) (2025-10-17)
 
 
