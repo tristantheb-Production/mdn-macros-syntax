@@ -1,17 +1,14 @@
 import * as vscode from 'vscode'
 import { MacroHoverComponent } from './MacroHoverComponent'
+import { DOCUMENT_SELECTOR } from '../../utils/constants'
 
 const HOVER_COMPONENTS = [
   new MacroHoverComponent()
 ]
 
-export function activateAllHovers(context: vscode.ExtensionContext) {
-  const selector: vscode.DocumentSelector = [
-    { language: 'markdown' },
-    { language: 'mdn-macros' }
-  ]
+const activateAllHovers = (context: vscode.ExtensionContext) => {
   context.subscriptions.push(
-    vscode.languages.registerHoverProvider(selector, {
+    vscode.languages.registerHoverProvider(DOCUMENT_SELECTOR, {
       provideHover(document, position) {
         for (const component of HOVER_COMPONENTS) {
           const hover = component.getHover(document, position)
@@ -22,3 +19,5 @@ export function activateAllHovers(context: vscode.ExtensionContext) {
     })
   )
 }
+
+export { activateAllHovers }

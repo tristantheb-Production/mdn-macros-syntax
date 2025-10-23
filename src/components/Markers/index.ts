@@ -5,7 +5,7 @@ const MARKER_COMPONENTS = [
   new DeprecatedMarkerComponent()
 ]
 
-export function activateAllMarkers(context: vscode.ExtensionContext) {
+const activateAllMarkers = (context: vscode.ExtensionContext) => {
   for (const comp of MARKER_COMPONENTS) {
     try {
       comp.activate(context)
@@ -16,4 +16,4 @@ export function activateAllMarkers(context: vscode.ExtensionContext) {
   }
 }
 
-export default activateAllMarkers
+export { activateAllMarkers }

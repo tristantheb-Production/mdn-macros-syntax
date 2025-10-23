@@ -19,42 +19,65 @@ export class MacroHoverComponent {
   }
 
   private buildMarkdown(found: { name: string; args: string[] }, info: MacroDefinition): string {
-    let enInfo: MacroDefinition | undefined = undefined
-    if (!info.description || (info.params && info.params.some((p) => !p.description))) {
-      try {
-        const enKnown = getKnownMacros('en')
-        enInfo = enKnown[found.name]
-      } catch {
-        enInfo = undefined
-      }
-    }
-    const params = info.params ? `(${info.params.map((p) => p.name).join(', ')})` : ''
-    const paramLines: string[] = []
-    if (info.params) {
-      for (let i = 0; i < info.params.length; i++) {
-        const p = info.params[i]
-        const allowed = p.allowedValues ? ` Allowed values: ${p.allowedValues.join(', ')}` : ''
-        const descFromInfo: string = p.description || ''
-        const descFromEnByName: string | undefined = enInfo && enInfo.params ? (enInfo.params.find((ep) => ep.name === p.name)?.description) : undefined
-        const descFromEnByPos: string | undefined = enInfo && enInfo.params && enInfo.params[i] ? enInfo.params[i].description : undefined
-        const descText = descFromInfo || descFromEnByName || descFromEnByPos || ''
-        const typeText = p.type || ''
-        const optionalText = p.optional ? ' (optional)' : ''
-        paramLines.push(`${p.name}${optionalText}: ${typeText} — ${descText}${allowed}`)
-      }
-    }
+    const enInfo = this.getEnglishFallback(found.name, info)
+    const params = this.buildParamsSignature(info)
+    const paramLines = this.buildParamLines(info, enInfo)
     const args = found.args.length ? `\n\nArguments: ${found.args.join(', ')}` : ''
     const descriptionText = info.description || (enInfo && enInfo.description) || ''
+
     let mdText = `**${found.name}** ${params}\n\n${descriptionText}${args}`
     if (paramLines.length) {
       const bullets = paramLines.map(l => `- ${l}`).join('\n')
       mdText += `\n\nParameter descriptions:\n\n${bullets}`
     }
+
     const deprecation = info.deprecated
-    if (deprecation) {
-      const deprecationText = typeof deprecation === 'string' ? deprecation : 'This macro is deprecated and should be removed from documentation.'
-      mdText += `\n\n---\n\n**DEPRECATED:** ${deprecationText}`
-    }
+    if (deprecation) mdText += this.buildDeprecationSection(deprecation)
     return mdText
+  }
+
+  private getEnglishFallback(name: string, info: MacroDefinition): MacroDefinition | undefined {
+    if (info.description && !(info.params && info.params.some(p => !p.description))) return undefined
+    try {
+      const enKnown = getKnownMacros('en')
+      return enKnown[name]
+    } catch {
+      return undefined
+    }
+  }
+
+  private buildParamsSignature(info: MacroDefinition): string {
+    return info.params ? `(${info.params.map((p) => p.name).join(', ')})` : ''
+  }
+
+  private buildParamLines(
+    info: MacroDefinition,
+    enInfo?: MacroDefinition
+  ): string[] {
+    const paramLines: string[] = []
+    if (!info.params) return paramLines
+    for (let i = 0; i < info.params.length; i++) {
+      const p = info.params[i]
+      const allowed = p.allowedValues ? ` Allowed values: ${p.allowedValues.join(', ')}` : ''
+      const descFromInfo: string = p.description || ''
+      const descFromEnByName: string | undefined = enInfo && enInfo.params
+        ? enInfo.params.find((ep) => ep.name === p.name)?.description
+        : undefined
+      const descFromEnByPos: string | undefined = enInfo && enInfo.params && enInfo.params[i]
+        ? enInfo.params[i].description
+        : undefined
+      const descText = descFromInfo || descFromEnByName || descFromEnByPos || ''
+      const typeText = p.type || ''
+      const optionalText = p.optional ? ' (optional)' : ''
+      paramLines.push(`${p.name}${optionalText}: ${typeText} — ${descText}${allowed}`)
+    }
+    return paramLines
+  }
+
+  private buildDeprecationSection(deprecation: string | true) {
+    const deprecationText = typeof deprecation === 'string'
+      ? deprecation
+      : 'This macro is deprecated and should be removed from documentation.'
+    return `\n\n---\n\n**DEPRECATED:** ${deprecationText}`
   }
 }
