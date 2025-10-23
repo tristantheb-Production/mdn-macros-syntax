@@ -5,7 +5,7 @@ const DOCUMENT_SELECTOR = ['mdn-macros', 'markdown']
 /**
  * Create a fresh RegExp instance for matching MDN macros.
  */
-function makeMacroRegex(): RegExp {
+const makeMacroRegex = (): RegExp => {
   return new RegExp(MACRO_REGEX_SOURCE, 'g')
 }
 

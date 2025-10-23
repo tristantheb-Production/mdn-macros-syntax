@@ -4,6 +4,8 @@ import { registerReplaceMacroName } from './replaceMacroName'
 /**
  * Register all hooks (commands / activation helpers) used by the extension.
  */
-export function registerHooks(context: vscode.ExtensionContext) {
+const registerHooks = (context: vscode.ExtensionContext): void => {
   registerReplaceMacroName(context)
 }
+
+export { registerHooks }

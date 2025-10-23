@@ -2,27 +2,25 @@ import * as vscode from 'vscode'
 import * as fs from 'fs'
 import * as path from 'path'
 
-// Heuristic to detect MDN-style repos: top-level `files/<locale>` structure.
-const LOCALE_REGEX = /^[a-z]{2}(?:-[a-z]{2})?$/i
-
-async function pathIsDirectory(p: string): Promise<boolean> {
-  try {
-    const stat = await fs.promises.stat(p)
-    return stat.isDirectory()
-  } catch {
-    return false
-  }
+type MDNRepoDetails = {
+  folder: string
+  filesExists: boolean
+  hasLocaleFolder: boolean
+  gitExists: boolean
 }
 
-async function checkHasLocaleFolder(filesPath: string): Promise<boolean> {
-  try {
-    const entries = await fs.promises.readdir(filesPath, { withFileTypes: true })
-    for (const e of entries) {
-      if (!e.isDirectory()) continue
-      if (LOCALE_REGEX.test(e.name)) return true
-    }
-  } catch {
-    // ignore errors
+const LANG_REGEX = /^[a-z]{2}(?:-[a-z]{2})?$/i
+
+const pathIsDirectory = async (p: string): Promise<boolean> => {
+  const stat = await fs.promises.stat(p)
+  return stat.isDirectory() || false
+}
+
+const checkHasLocaleFolder = async (filesPath: string): Promise<boolean> => {
+  const entries = await fs.promises.readdir(filesPath, { withFileTypes: true })
+  for (const e of entries) {
+    if (!e.isDirectory()) continue
+    if (LANG_REGEX.test(e.name)) return true
   }
   return false
 }
@@ -30,7 +28,7 @@ async function checkHasLocaleFolder(filesPath: string): Promise<boolean> {
 /**
  * Detect whether the current workspace looks like an MDN repository.
  */
-export async function isMdnRepo(): Promise<boolean> {
+const isMdnRepo = async (): Promise<boolean> => {
   try {
     const matches = await vscode.workspace.findFiles('**/files/*/**/index.md', '**/node_modules/**', 1)
     if (matches && matches.length > 0) return true
@@ -50,18 +48,11 @@ export async function isMdnRepo(): Promise<boolean> {
   return false
 }
 
-export default isMdnRepo
-
 /**
  * Detailed detection results per workspace folder. Useful for debugging why
  * the heuristic did or didn't match.
  */
-export async function detectMdnRepoDetailed(): Promise<Array<{
-  folder: string
-  filesExists: boolean
-  hasLocaleFolder: boolean
-  gitExists: boolean
-}>> {
+const detectMdnRepoDetailed = async (): Promise<Array<MDNRepoDetails>> => {
   const folders = vscode.workspace.workspaceFolders || []
   const results: Array<{ folder: string; filesExists: boolean; hasLocaleFolder: boolean; gitExists: boolean }> = []
 
@@ -76,3 +67,5 @@ export async function detectMdnRepoDetailed(): Promise<Array<{
 
   return results
 }
+
+export { isMdnRepo, detectMdnRepoDetailed }

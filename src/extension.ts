@@ -3,7 +3,7 @@ import ActivationManager from './ActivationManager'
 
 let diagnosticCollection: vscode.DiagnosticCollection | undefined
 
-export async function activate(context: vscode.ExtensionContext) {
+const activate = async (context: vscode.ExtensionContext): Promise<void> => {
   diagnosticCollection = vscode.languages.createDiagnosticCollection('mdn-macros')
   context.subscriptions.push(diagnosticCollection)
 
@@ -12,6 +12,8 @@ export async function activate(context: vscode.ExtensionContext) {
   await manager.detectAndInit()
 }
 
-export function deactivate() {
+const deactivate = (): void => {
   diagnosticCollection?.dispose()
 }
+
+export { activate, deactivate }

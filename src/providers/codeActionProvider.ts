@@ -5,7 +5,7 @@ import { getKnownMacros } from '../macros'
 /**
  * Provide quick-fix code actions for unknown macro diagnostics (suggest replacements).
  */
-export const codeActionProvider: vscode.CodeActionProvider = {
+const codeActionProvider: vscode.CodeActionProvider = {
   provideCodeActions(document: vscode.TextDocument, _range: vscode.Range, context: vscode.CodeActionContext) {
     const actions: vscode.CodeAction[] = []
     const locale = vscode.env.language || 'en'
@@ -30,7 +30,10 @@ export const codeActionProvider: vscode.CodeActionProvider = {
           const nameIdx = diagText.indexOf(unknownName)
           if (nameIdx >= 0) {
             const startOffset = document.offsetAt(diagnostic.range.start) + nameIdx
-            const editRange = new vscode.Range(document.positionAt(startOffset), document.positionAt(startOffset + unknownName.length))
+            const editRange = new vscode.Range(
+              document.positionAt(startOffset),
+              document.positionAt(startOffset + unknownName.length)
+            )
             const we = new vscode.WorkspaceEdit()
             we.replace(document.uri, editRange, best.name)
             action.edit = we
@@ -43,3 +46,5 @@ export const codeActionProvider: vscode.CodeActionProvider = {
     return actions
   }
 }
+
+export { codeActionProvider }

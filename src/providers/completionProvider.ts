@@ -5,7 +5,7 @@ import { getKnownMacros } from '../macros'
  * Completion provider for MDN macros.
  * Triggers when user types '{{' and offers macro names with simple parameter snippets.
  */
-export const completionProvider: vscode.CompletionItemProvider = {
+const completionProvider: vscode.CompletionItemProvider = {
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
     const prefix = document.lineAt(position.line).text.substring(0, position.character)
     if (!/\{\{\s*$/.test(prefix)) return []
@@ -45,3 +45,5 @@ export const completionProvider: vscode.CompletionItemProvider = {
     })
   }
 }
+
+export { completionProvider }

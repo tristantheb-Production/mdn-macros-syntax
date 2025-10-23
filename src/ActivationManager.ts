@@ -50,7 +50,11 @@ class ActivationManager {
     // lightweight decorators/hovers/markers are already plain imports
     try {
       this.context.subscriptions.push(
-        vscode.languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, completionProvider, '{')
+        vscode.languages.registerCompletionItemProvider(
+          DOCUMENT_SELECTOR,
+          completionProvider,
+          '{'
+        )
       )
 
       this.context.subscriptions.push(
