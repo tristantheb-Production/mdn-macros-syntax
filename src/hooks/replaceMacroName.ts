@@ -4,7 +4,7 @@ import * as vscode from 'vscode'
  * Register the `mdn-macros.replaceMacroName` command.
  * The command expects a payload: [uriString, startOffset, endOffset, replacementName]
  */
-export function registerReplaceMacroName(context: vscode.ExtensionContext) {
+const registerReplaceMacroName = (context: vscode.ExtensionContext): void => {
   type Payload = [string, number, number, string]
   context.subscriptions.push(vscode.commands.registerCommand('mdn-macros.replaceMacroName', async (...args: unknown[]) => {
     const payload = (Array.isArray(args[0]) ? args[0] : args) as unknown as Payload | undefined
@@ -23,3 +23,5 @@ export function registerReplaceMacroName(context: vscode.ExtensionContext) {
     }
   }))
 }
+
+export { registerReplaceMacroName }

@@ -8,7 +8,7 @@ const BLOCK_DECORATORS = [
   new FrontMatterDecorationsComponent()
 ]
 
-function activateAllDecorations(context: ExtensionContext) {
+const activateAllDecorations = (context: ExtensionContext) => {
   let decoratorInstances = BLOCK_DECORATORS.map(
     decorator => ({
       decorations: decorator.getDecorations(context),
@@ -19,12 +19,12 @@ function activateAllDecorations(context: ExtensionContext) {
   // To dispose old decorations on theme change
   let allDecorationTypes: TextEditorDecorationType[] = []
 
-  function disposeAllDecorations() {
+  const disposeAllDecorations = () => {
     for (const deco of allDecorationTypes) deco.dispose()
     allDecorationTypes = []
   }
 
-  function updateAllDecorations(editor: TextEditor | undefined) {
+  const updateAllDecorations = (editor: TextEditor | undefined) => {
     if (!editor) return
     const doc = editor.document
     if (doc.languageId !== 'markdown' && doc.languageId !== 'mdn-macros') return
