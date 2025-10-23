@@ -16,6 +16,8 @@ const mapToEnUsPath = (fsPath: string): string | undefined => {
   return newParts.slice(idx).join('/')
 }
 
+type FrontMatterRange = { start: vscode.Position; end: vscode.Position }
+
 export class CodeLensProvider implements vscode.CodeLensProvider {
   private onDidChangeEmitter = new vscode.EventEmitter<void>()
   public readonly onDidChangeCodeLenses = this.onDidChangeEmitter.event
@@ -37,14 +39,21 @@ export class CodeLensProvider implements vscode.CodeLensProvider {
 
     if (existing) {
       const existingValue = existing.value ?? ''
-      // If the file already has the same commit (full or short), don't offer replacement
+      // Don't suggest replacement when hashes already match
       if (existingValue === sha || existingValue === sha.substring(0, 7)) return []
 
       const cl = new CodeLensComponent(existing.range, existing.range)
+      const replaceArgs = [
+        document.uri.toString(),
+        document.offsetAt(existing.range.start),
+        document.offsetAt(existing.range.end),
+        sha,
+        'l10n.sourceCommit'
+      ]
       cl.setCommand(
         `Replace sourceCommit → ${sha.substring(0, 7)}`,
         'mdn-macros.updateContentHash',
-        [document.uri.toString(), document.offsetAt(existing.range.start), document.offsetAt(existing.range.end), sha, 'l10n.sourceCommit']
+        replaceArgs
       )
       return [cl]
     }
@@ -52,22 +61,32 @@ export class CodeLensProvider implements vscode.CodeLensProvider {
     const insertPos = frontRange ? document.offsetAt(frontRange.end) : 0
     const posRange = new vscode.Range(document.positionAt(insertPos), document.positionAt(insertPos))
     const clAdd = new CodeLensComponent(posRange, posRange)
-    clAdd.setCommand(`Add l10n.sourceCommit → ${sha.substring(0, 7)}`, 'mdn-macros.updateContentHash', [document.uri.toString(), insertPos, insertPos, sha, 'l10n.sourceCommit'])
+    const addArgs = [document.uri.toString(), insertPos, insertPos, sha, 'l10n.sourceCommit']
+    clAdd.setCommand(
+      `Add l10n.sourceCommit → ${sha.substring(0, 7)}`,
+      'mdn-macros.updateContentHash',
+      addArgs
+    )
     return [clAdd]
   }
 
 }
 
-const findFrontmatterRange = (document: vscode.TextDocument): { start: vscode.Position; end: vscode.Position } | null => {
+const findFrontmatterRange = (document: vscode.TextDocument): FrontMatterRange | null => {
   if (document.lineCount === 0) return null
   if (document.lineAt(0).text.trim() !== '---') return null
   for (let i = 1; i < Math.min(200, document.lineCount); i++) {
-    if (document.lineAt(i).text.trim() === '---') return { start: new vscode.Position(0, 0), end: new vscode.Position(i, 0) }
+    if (document.lineAt(i).text.trim() === '---') {
+      return {
+        start: new vscode.Position(0, 0),
+        end: new vscode.Position(i, 0)
+      }
+    }
   }
   return null
 }
 
-const findL10nSourceCommit = (document: vscode.TextDocument, frontRange: { start: vscode.Position; end: vscode.Position }) => {
+const findL10nSourceCommit = (document: vscode.TextDocument, frontRange: FrontMatterRange) => {
   let inL10n = false
   for (let i = frontRange.start.line + 1; i < frontRange.end.line; i++) {
     const text = document.lineAt(i).text

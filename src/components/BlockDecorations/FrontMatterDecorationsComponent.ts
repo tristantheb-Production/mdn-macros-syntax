@@ -28,7 +28,13 @@ class FrontMatterDecorationsComponent extends DecorationComponent {
         }
         if (endLine < lineCount) {
           // Block includes both --- lines
-          const range = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(endLine, doc.lineAt(endLine).text.length))
+          const range = new vscode.Range(
+            new vscode.Position(line, 0),
+            new vscode.Position(
+              endLine,
+              doc.lineAt(endLine).text.length
+            )
+          )
           result['frontmatter-bg'].push(range)
           line = endLine + 1
           continue

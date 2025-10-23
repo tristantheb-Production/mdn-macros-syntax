@@ -9,7 +9,14 @@ const parsePayload = (args: unknown[]): [vscode.Uri, number, number, string, str
 
 const openDoc = async (uri: vscode.Uri) => vscode.workspace.openTextDocument(uri)
 
-const replaceLine = (edit: vscode.WorkspaceEdit, uri: vscode.Uri, doc: vscode.TextDocument, startOffset: number, key: string, fullSha?: string) => {
+const replaceLine = (
+  edit: vscode.WorkspaceEdit,
+  uri: vscode.Uri,
+  doc: vscode.TextDocument,
+  startOffset: number,
+  key: string,
+  fullSha?: string
+) => {
   const startPos = doc.positionAt(startOffset)
   const line = doc.lineAt(startPos.line)
   const indentMatch = line.text.match(/^(\s*)/)
@@ -18,11 +25,24 @@ const replaceLine = (edit: vscode.WorkspaceEdit, uri: vscode.Uri, doc: vscode.Te
   edit.replace(uri, line.rangeIncludingLineBreak, replacement)
 }
 
-const insertUnderL10n = (edit: vscode.WorkspaceEdit, uri: vscode.Uri, doc: vscode.TextDocument, fmStart: number, fmEnd: number, key: string, fullSha?: string) => {
+const insertUnderL10n = (
+  edit: vscode.WorkspaceEdit,
+  uri: vscode.Uri,
+  doc: vscode.TextDocument,
+  fmStart: number,
+  fmEnd: number,
+  key: string,
+  fullSha?: string
+) => {
   const fmStartLine = doc.positionAt(fmStart).line
   const fmEndLine = doc.positionAt(fmEnd).line
   let l10nLine = -1
-  for (let i = fmStartLine + 1; i < fmEndLine; i++) if (doc.lineAt(i).text.trim().toLowerCase() === 'l10n:') { l10nLine = i; break }
+  for (let i = fmStartLine + 1; i < fmEndLine; i++) {
+    if (doc.lineAt(i).text.trim().toLowerCase() === 'l10n:') {
+      l10nLine = i
+      break
+    }
+  }
   const newLine = `  ${key}: ${fullSha}\n`
   if (l10nLine !== -1) {
     const indentMatch = doc.lineAt(l10nLine).text.match(/^(\s*)/)
@@ -44,44 +64,46 @@ const createFrontmatter = (edit: vscode.WorkspaceEdit, uri: vscode.Uri, key: str
 }
 
 export function registerUpdateContentHash(context: vscode.ExtensionContext) {
-  context.subscriptions.push(vscode.commands.registerCommand('mdn-macros.updateContentHash', async (...args: unknown[]) => {
-    const parsed = parsePayload(args)
-    if (!parsed) return
-    try {
-      const [uri, startOffset, endOffset, sha, keyName] = parsed
-      const doc = await openDoc(uri)
-      const edit = new vscode.WorkspaceEdit()
-      const fullSha = sha
-      const targetKey = keyName || 'l10n.sourceCommit'
-      const parts = targetKey.split('.')
-      const key = parts[parts.length - 1]
+  context.subscriptions.push(
+    vscode.commands.registerCommand('mdn-macros.updateContentHash', async (...args: unknown[]) => {
+      const parsed = parsePayload(args)
+      if (!parsed) return
+      try {
+        const [uri, startOffset, endOffset, sha, keyName] = parsed
+        const doc = await openDoc(uri)
+        const edit = new vscode.WorkspaceEdit()
+        const fullSha = sha
+        const targetKey = keyName || 'l10n.sourceCommit'
+        const parts = targetKey.split('.')
+        const key = parts[parts.length - 1]
 
-      if (endOffset > startOffset) {
-        replaceLine(edit, uri, doc, startOffset, key, fullSha)
-      } else {
-        const full = doc.getText()
-        const fmStart = full.indexOf('---')
-        if (fmStart === 0) {
-          const fmEnd = full.indexOf('---', fmStart + 3)
-          if (fmEnd > fmStart) insertUnderL10n(edit, uri, doc, fmStart, fmEnd, key, fullSha)
-          else {
+        if (endOffset > startOffset) {
+          replaceLine(edit, uri, doc, startOffset, key, fullSha)
+        } else {
+          const full = doc.getText()
+          const fmStart = full.indexOf('---')
+          if (fmStart === 0) {
+            const fmEnd = full.indexOf('---', fmStart + 3)
+            if (fmEnd > fmStart) insertUnderL10n(edit, uri, doc, fmStart, fmEnd, key, fullSha)
+            else {
+              createFrontmatter(edit, uri, key, fullSha)
+              await vscode.workspace.applyEdit(edit)
+              await vscode.window.showTextDocument(uri)
+              return
+            }
+          } else {
             createFrontmatter(edit, uri, key, fullSha)
             await vscode.workspace.applyEdit(edit)
             await vscode.window.showTextDocument(uri)
             return
           }
-        } else {
-          createFrontmatter(edit, uri, key, fullSha)
-          await vscode.workspace.applyEdit(edit)
-          await vscode.window.showTextDocument(uri)
-          return
         }
-      }
 
-      await vscode.workspace.applyEdit(edit)
-      await vscode.window.showTextDocument(uri)
-    } catch (err) {
-      console.error('mdn-macros.updateContentHash failed', err instanceof Error ? err.message : String(err))
-    }
-  }))
+        await vscode.workspace.applyEdit(edit)
+        await vscode.window.showTextDocument(uri)
+      } catch (err) {
+        console.error('mdn-macros.updateContentHash failed', err instanceof Error ? err.message : String(err))
+      }
+    })
+  )
 }

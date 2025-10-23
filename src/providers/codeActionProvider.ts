@@ -3,7 +3,7 @@ import { levenshtein } from '../utils/levenshtein'
 import { getKnownMacros } from '../macros'
 
 /**
- * Provide quick-fix code actions for unknown macro diagnostics (suggest replacements).
+ * Provide quick-fix code actions for unknown macro diagnostics
  */
 const codeActionProvider: vscode.CodeActionProvider = {
   provideCodeActions(document: vscode.TextDocument, _range: vscode.Range, context: vscode.CodeActionContext) {

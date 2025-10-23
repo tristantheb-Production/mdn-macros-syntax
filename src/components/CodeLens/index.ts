@@ -13,9 +13,11 @@ const createCompositeProvider = (): { provider: vscode.CodeLensProvider; emitter
   const emitter = new vscode.EventEmitter<void>()
 
   const normalizeProviderResult = async (r: vscode.ProviderResult<vscode.CodeLens[]>) : Promise<vscode.CodeLens[]> => {
-    if (!r) return []
+    if (!r)
+      return []
     const resolved = await r
-    if (!resolved || !Array.isArray(resolved)) return []
+    if (!resolved || !Array.isArray(resolved))
+      return []
     return resolved.filter((c): c is vscode.CodeLens => Boolean(c))
   }
 
@@ -41,10 +43,15 @@ const registerChildEvents = (context: vscode.ExtensionContext, emitter: vscode.E
 }
 
 const registerRefreshListeners = (context: vscode.ExtensionContext) => {
-  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(() => CODELENS_PROVIDERS.forEach(p => p.refresh?.())))
-  context.subscriptions.push(vscode.workspace.onDidChangeTextDocument((e) => {
-    if (vscode.window.activeTextEditor && e.document === vscode.window.activeTextEditor.document) CODELENS_PROVIDERS.forEach(p => p.refresh?.())
-  }))
+  context.subscriptions.push(
+    vscode.window.onDidChangeActiveTextEditor(() => CODELENS_PROVIDERS.forEach(p => p.refresh?.()))
+  )
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeTextDocument((e) => {
+      if (vscode.window.activeTextEditor && e.document === vscode.window.activeTextEditor.document)
+        CODELENS_PROVIDERS.forEach(p => p.refresh?.())
+    })
+  )
 }
 
 const activateAllCodeLens = (context: vscode.ExtensionContext) => {
