@@ -47,6 +47,6 @@ When a deprecated macro is used, a warning is shown on hover with information ab
 
 When you're in the localization folder, inside a Markdown document, the frontmatter will show a code lens indicating the source commit hash from the latest english version if your hash is outdated or missing.
 
-| Adding hash                                                               | Updating hash                                                               |
-| ------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| <video src="./docs/medias/adding-sourceCommit.mp4" loop autoplay></video> | <video src="./docs/medias/updating-sourceCommit.mp4" loop autoplay></video> |
+| Adding hash                                         | Updating hash                                         |
+| --------------------------------------------------- | ----------------------------------------------------- |
+| [View video](./docs/medias/adding-sourceCommit.mp4) | [View video](./docs/medias/updating-sourceCommit.mp4) |
