@@ -6,7 +6,7 @@ import { MacroDefinition, BaseMacroJSON, LocalizedMacroEntry, MacroParam, ParamT
  * Load base macro definitions from JSON files.
  * @returns A mapping of macro names to their definitions.
  */
-function loadBaseMacros(): { [key: string]: Omit<MacroDefinition, 'description'> & { descriptionKey?: string } } {
+const loadBaseMacros = (): { [key: string]: Omit<MacroDefinition, 'description'> & { descriptionKey?: string } } => {
   // Resolve path to macro definitions
   const repoDefs = path.resolve(process.cwd(), 'src', 'macros', 'definitions')
   const upLevelSrcDefs = path.resolve(__dirname, '..', '..', 'src', 'macros', 'definitions')
@@ -71,7 +71,7 @@ const BASE_MACROS = loadBaseMacros()
  * @param lang Language code (e.g., 'en', 'fr', 'pt-br')
  * @returns Mapping of macro names to their localized descriptions and parameter descriptions
  */
-function loadLocalizedDescriptions(lang: string): { [key: string]: LocalizedMacroEntry } {
+const loadLocalizedDescriptions = (lang: string): { [key: string]: LocalizedMacroEntry } => {
   const filename = lang === 'en' ? 'macros.nls.json' : `macros.nls.${lang}.json`
   const candidates: string[] = []
 
@@ -105,7 +105,7 @@ function loadLocalizedDescriptions(lang: string): { [key: string]: LocalizedMacr
  * @param locale Optional locale string (e.g., 'en', 'fr', 'pt-BR')
  * @returns A mapping of macro names to their definitions.
  */
-export function getKnownMacros(locale?: string): { [key: string]: MacroDefinition } {
+const getKnownMacros = (locale?: string): { [key: string]: MacroDefinition } => {
   const lang = (locale || process.env.VSCODE_UI_LANGUAGE || 'en').toLowerCase()
   const short = lang.split('-')[0]
   // load english base first
@@ -155,3 +155,5 @@ export function getKnownMacros(locale?: string): { [key: string]: MacroDefinitio
   }
   return result
 }
+
+export { getKnownMacros }

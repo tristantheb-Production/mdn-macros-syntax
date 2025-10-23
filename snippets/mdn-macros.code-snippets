@@ -1,9 +1,0 @@
-{
-  "Insert MDN macro": {
-    "prefix": "mdnmacro",
-    "body": [
-      "macro-$1($2)$0"
-    ],
-    "description": "Insert a MDN macro template"
-  }
-}

@@ -6,7 +6,7 @@ import { activateAllCodeLens } from '../components/CodeLens'
 /**
  * Register all hooks (commands / activation helpers) used by the extension.
  */
-const registerHooks = (context: vscode.ExtensionContext) => {
+const registerHooks = (context: vscode.ExtensionContext): void => {
   registerReplaceMacroName(context)
   registerUpdateContentHash(context)
   try {

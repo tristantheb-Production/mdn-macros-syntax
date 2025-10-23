@@ -6,12 +6,16 @@ import { makeMacroRegex } from '../utils/constants'
  */
 export const legend = new vscode.SemanticTokensLegend(['function', 'string', 'number', 'keyword', 'parameter'], [])
 
-function tokenTypeIndex(type: string): number {
+const tokenTypeIndex = (type: string): number => {
   const map: { [k: string]: number } = { function: 0, string: 1, number: 2, keyword: 3, parameter: 4 }
   return map[type] ?? 0
 }
 
-function parseArgsWithPositions(argsRaw: string, absStart: number): Array<{ text: string; start: number; end: number }> {
+const parseArgsWithPositions = (argsRaw: string, absStart: number): Array<{
+  text: string;
+  start: number;
+  end: number
+}> => {
   const res: Array<{ text: string; start: number; end: number }> = []
   let inSingle = false, inDouble = false
   let argStart = 0
@@ -34,9 +38,10 @@ function parseArgsWithPositions(argsRaw: string, absStart: number): Array<{ text
 }
 
 /**
- * Semantic tokens provider — mark macro names and argument tokens (strings/numbers/booleans).
+ * Semantic tokens provider — mark macro names and argument tokens
+ * (strings/numbers/booleans).
  */
-export const provider: vscode.DocumentSemanticTokensProvider = {
+const provider: vscode.DocumentSemanticTokensProvider = {
   provideDocumentSemanticTokens(document: vscode.TextDocument): vscode.ProviderResult<vscode.SemanticTokens> {
     const builder = new vscode.SemanticTokensBuilder(legend)
     const text = document.getText()
@@ -55,7 +60,6 @@ export const provider: vscode.DocumentSemanticTokensProvider = {
 
       if (argsRaw.length === 0) continue
 
-      // calculate args absolute start (position inside fullText just after the opening parenthesis)
       const parenIndex = fullText.indexOf('(')
       const argsAbsStart = fullStart + parenIndex + 1
       const args = parseArgsWithPositions(argsRaw, argsAbsStart)
@@ -79,3 +83,5 @@ export const provider: vscode.DocumentSemanticTokensProvider = {
     return builder.build()
   }
 }
+
+export { provider }

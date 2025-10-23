@@ -19,7 +19,7 @@
   "icon": "resources/mms-icon.png",
   "pricing": "Free",
   "activationEvents": [
-    "onLanguage:markdown"
+    "workspaceContains:**/files/*/**/index.md"
   ],
   "engines": {
     "vscode": "^1.105.0"
@@ -35,25 +35,10 @@
   },
   "homepage": "https://github.com/tristantheb-Production/mdn-macros-syntax/blob/main/README.md",
   "contributes": {
-    "languages": [
-      {
-        "id": "mdn-macros",
-        "aliases": [
-          "MDN Macros",
-          "mdn-macros"
-        ]
-      }
-    ],
     "grammars": [
       {
         "scopeName": "source.mdn-macros",
         "path": "./syntaxes/mdn-macros.tmLanguage.json"
-      }
-    ],
-    "snippets": [
-      {
-        "language": "mdn-macros",
-        "path": "./snippets/mdn-macros.code-snippets"
       }
     ]
   },
