@@ -27,8 +27,6 @@ const stripMatchingQuotes = (s: string): string => {
 
 /**
  * Split argument list while preserving empty slots.
- * Handles quoted strings and ignores commas inside quotes.
- * Returns array of argument strings with surrounding quotes removed when present.
  */
 const splitArgsPreserveEmpty = (rawArgs: string): string[] => {
   if (!rawArgs || rawArgs.length === 0) return []
@@ -69,8 +67,8 @@ const splitArgsPreserveEmpty = (rawArgs: string): string[] => {
 }
 
 /**
- * Find a macro that contains the given offset and return its parsed name/args and positions.
- * Returns undefined when no macro is found at the offset.
+ * Find a macro that contains the given offset and return its parsed name/args
+ * and positions.
  */
 const parseMacroAtOffset = (text: string, offset: number): MacroParseResult | undefined => {
   const macroRegex = makeMacroRegex()

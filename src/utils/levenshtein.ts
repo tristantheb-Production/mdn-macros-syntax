@@ -1,11 +1,5 @@
 /**
  * Computes the Levenshtein distance between two strings.
- * The Levenshtein distance is the minimum number of single-character edits
- * (insertions, deletions, or substitutions) required to change one string into the other.
- *
- * @param {string} str1 - The first string to compare.
- * @param {string} str2 - The second string to compare.
- * @returns {number} The minimum number of edit operations required.
  *
  * Example:
  *   levenshtein('kitten', 'sitting') // returns 3

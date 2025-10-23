@@ -3,7 +3,8 @@ import { getKnownMacros } from '../macros'
 
 /**
  * Completion provider for MDN macros.
- * Triggers when user types '{{' and offers macro names with simple parameter snippets.
+ * Triggers when user types '{{' and offers macro names with simple parameter
+ * snippets.
  */
 const completionProvider: vscode.CompletionItemProvider = {
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
@@ -12,13 +13,12 @@ const completionProvider: vscode.CompletionItemProvider = {
     const locale = (vscode.env.language || 'en')
     const KNOWN_MACROS = getKnownMacros(locale)
 
-    // Determine whether a closing '}}' already exists immediately after the cursor (strict: no whitespace)
+    // Check whether a closing '}}' already exists
     const offset = document.offsetAt(position)
     const docText = document.getText()
     const remaining = docText.substring(offset, Math.min(offset + 16, docText.length))
     const closingExistsStrict = /^\}\}/.test(remaining)
 
-    // If there is a non-empty selection that already includes the closing braces, we should not append
     const selection = vscode.window.activeTextEditor?.selection
     const selectionContainsClosing = !!selection && !selection.isEmpty && document.getText(selection).includes('}}')
 

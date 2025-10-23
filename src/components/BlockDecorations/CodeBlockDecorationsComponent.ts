@@ -53,8 +53,17 @@ class CodeBlockDecorationsComponent extends DecorationComponent {
           endLine++
         }
         if (endLine < lineCount) {
-          const blockRange = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(endLine, doc.lineAt(endLine).text.length))
-          const iconRange = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(line, 0))
+          const blockRange = new vscode.Range(
+            new vscode.Position(line, 0),
+            new vscode.Position(
+              endLine,
+              doc.lineAt(endLine).text.length
+            )
+          )
+          const iconRange = new vscode.Range(
+            new vscode.Position(line, 0),
+            new vscode.Position(line, 0)
+          )
           const parts = infoString.split(/\s+/).map(p => p.trim()).filter(Boolean)
           for (const part of parts) {
             const key = part.toLowerCase()

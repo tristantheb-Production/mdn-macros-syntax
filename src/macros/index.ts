@@ -68,8 +68,6 @@ const BASE_MACROS = loadBaseMacros()
 
 /**
  * Load localized macro descriptions for a given language code.
- * @param lang Language code (e.g., 'en', 'fr', 'pt-br')
- * @returns Mapping of macro names to their localized descriptions and parameter descriptions
  */
 const loadLocalizedDescriptions = (lang: string): { [key: string]: LocalizedMacroEntry } => {
   const filename = lang === 'en' ? 'macros.nls.json' : `macros.nls.${lang}.json`
@@ -102,8 +100,6 @@ const loadLocalizedDescriptions = (lang: string): { [key: string]: LocalizedMacr
 
 /**
  * Get known macro definitions for a specific locale.
- * @param locale Optional locale string (e.g., 'en', 'fr', 'pt-BR')
- * @returns A mapping of macro names to their definitions.
  */
 const getKnownMacros = (locale?: string): { [key: string]: MacroDefinition } => {
   const lang = (locale || process.env.VSCODE_UI_LANGUAGE || 'en').toLowerCase()
@@ -135,9 +131,15 @@ const getKnownMacros = (locale?: string): { [key: string]: MacroDefinition } => 
       }
     }) : undefined
     if (params) {
-      const enParamsMap = (enEntry.params && typeof enEntry.params === 'object') ? (enEntry.params as { [k: string]: string }) : {}
-      const shortParamsMap = (shortEntry.params && typeof shortEntry.params === 'object') ? (shortEntry.params as { [k: string]: string }) : {}
-      const fullParamsMap = (fullEntry.params && typeof fullEntry.params === 'object') ? (fullEntry.params as { [k: string]: string }) : {}
+      const enParamsMap = (enEntry.params && typeof enEntry.params === 'object') ?
+        (enEntry.params as { [k: string]: string }) :
+        {}
+      const shortParamsMap = (shortEntry.params && typeof shortEntry.params === 'object') ?
+        (shortEntry.params as { [k: string]: string }) :
+        {}
+      const fullParamsMap = (fullEntry.params && typeof fullEntry.params === 'object') ?
+        (fullEntry.params as { [k: string]: string }) :
+        {}
 
       const fullVals = Object.values(fullParamsMap || {})
       const shortVals = Object.values(shortParamsMap || {})
