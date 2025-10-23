@@ -1,11 +1,11 @@
 import * as vscode from 'vscode'
 import { activateAllDecorations } from './components/BlockDecorations'
+import { activateAllDiagnostics } from './components/Diagnostics'
 import { activateAllHovers } from './components/Hovers'
 import { activateAllMarkers } from './components/Markers'
 import { registerHooks } from './hooks/activation'
 import { codeActionProvider } from './providers/codeActionProvider'
 import { completionProvider } from './providers/completionProvider'
-import { computeDiagnostics } from './providers/diagnosticProvider'
 import { provider as semanticProvider, legend as semanticLegend } from './providers/semanticTokensProvider'
 import { DOCUMENT_SELECTOR } from './utils/constants'
 import { isMdnRepo } from './utils/repoDetection'
@@ -30,14 +30,6 @@ class ActivationManager {
     return this.output
   }
 
-  /** Ensure there's a DiagnosticCollection available */
-  private ensureDiagnosticCollection(): void {
-    if (!this.diagnosticCollection) {
-      this.diagnosticCollection = vscode.languages.createDiagnosticCollection('mdn-macros')
-      this.context.subscriptions.push(this.diagnosticCollection)
-    }
-  }
-
   /** Public entry to enable features (idempotent). Lazy-loads providers. */
   public async initFeatures(): Promise<void> {
     if (this.featuresActivated) return
@@ -47,7 +39,6 @@ class ActivationManager {
 
     await this.registerProviders()
     await this.registerComponents()
-    this.registerDiagnostics()
     try {
       registerHooks(this.context)
     } catch (err) {
@@ -88,29 +79,10 @@ class ActivationManager {
       activateAllHovers(this.context)
       activateAllDecorations(this.context)
       activateAllMarkers(this.context)
+      activateAllDiagnostics(this.context, this.diagnosticCollection!)
     } catch (err) {
       this.getOutput().appendLine('mdn-macros: failed to register providers: ' + String(err))
       console.error(err)
-    }
-  }
-
-  /** Register diagnostics handlers and run an initial pass */
-  private registerDiagnostics(): void {
-    // TODO: Replace this as component
-    this.ensureDiagnosticCollection()
-    const refreshDiagnostics = (document: vscode.TextDocument) => {
-      try {
-        const diags = computeDiagnostics(document)
-        this.diagnosticCollection?.set(document.uri, diags)
-      } catch (err) {
-        this.getOutput().appendLine('mdn-macros: diagnostic compute error: ' + String(err))
-      }
-    }
-
-    this.context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(refreshDiagnostics))
-    this.context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document)))
-    if (vscode.workspace.textDocuments) {
-      vscode.workspace.textDocuments.forEach(refreshDiagnostics)
     }
   }
 
