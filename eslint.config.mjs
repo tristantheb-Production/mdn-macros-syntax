@@ -1,8 +1,13 @@
-const stylistic = require('@stylistic/eslint-plugin')
-const tsParser = require('@typescript-eslint/parser');
-const tsPlugin = require('@typescript-eslint/eslint-plugin');
+import stylistic from '@stylistic/eslint-plugin'
+import tsPlugin from '@typescript-eslint/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-module.exports = [
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const config = [
   { ignores: ['out/', 'dist/', 'node_modules/'] },
   {
     files: ['src/**/*.ts', 'src/**/*.tsx'],
@@ -44,6 +49,7 @@ module.exports = [
         'before': true,
         'after': true
       }],
+      '@stylistic/max-len': ['error', { 'code': 120, 'comments': 80 }],
       '@stylistic/no-multi-spaces': 'error',
       '@stylistic/no-trailing-spaces': 'error',
       '@stylistic/quotes': ['error', 'single'],
@@ -61,10 +67,10 @@ module.exports = [
       'no-undef': 'error'
     }
   }
-];
+]
 
 // Add Mocha test globals for test files
-module.exports.push({
+config.push({
   files: ['src/test/**/*.ts'],
   languageOptions: {
     parser: tsParser,
@@ -83,4 +89,6 @@ module.exports.push({
       afterEach: 'readonly'
     }
   }
-});
+})
+
+export default config
