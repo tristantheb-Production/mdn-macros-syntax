@@ -28,12 +28,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tristantheb-Production/mdn-macros-syntax.git"
+    "url": "https://github.com/tristantheb/mdn-macros-syntax.git"
   },
   "bugs": {
-    "url": "https://github.com/tristantheb-Production/mdn-macros-syntax/issues/new?template=bug-report.md"
+    "url": "https://github.com/tristantheb/mdn-macros-syntax/issues/new?template=bug-report.md"
   },
-  "homepage": "https://github.com/tristantheb-Production/mdn-macros-syntax/blob/main/README.md",
+  "homepage": "https://github.com/tristantheb/mdn-macros-syntax/blob/main/README.md",
   "contributes": {
     "grammars": [
       {
