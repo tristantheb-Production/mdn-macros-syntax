@@ -49,4 +49,4 @@ When you're in the localization folder, inside a Markdown document, the frontmat
 
 | Adding hash                                         | Updating hash                                         |
 | --------------------------------------------------- | ----------------------------------------------------- |
-| [View video](./docs/medias/adding-sourceCommit.mp4) | [View video](./docs/medias/updating-sourceCommit.mp4) |
+| ![Example of adding hash](./docs/images/adding-sourceCommit.gif) | ![Example of updating hash](./docs/images/updating-sourceCommit.gif) |
