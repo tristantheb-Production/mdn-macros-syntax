@@ -1,48 +1,58 @@
 import * as vscode from 'vscode'
 import { getKnownMacros } from '../macros'
+import type { MacroDefinition } from '../types/macro'
 
-/**
- * Completion provider for MDN macros.
- * Triggers when user types '{{' and offers macro names with simple parameter
- * snippets.
- */
+const shouldTriggerCompletion = (document: vscode.TextDocument, position: vscode.Position): boolean => {
+  const prefix = document.lineAt(position.line).text.substring(0, position.character)
+  return /\{\{\s*$/.test(prefix)
+}
+
+const hasClosingImmediately = (document: vscode.TextDocument, position: vscode.Position): boolean => {
+  const offset = document.offsetAt(position)
+  const docText = document.getText()
+  const remaining = docText.substring(offset, Math.min(offset + 16, docText.length))
+  return /^\}\}/.test(remaining)
+}
+
+const selectionContainsClosing = (document: vscode.TextDocument): boolean => {
+  const sel = vscode.window.activeTextEditor?.selection
+  return !!sel && !sel.isEmpty && document.getText(sel).includes('}}')
+}
+
+const buildParamsSnippet = (paramsDef: MacroDefinition['params'] | undefined): string => {
+  if (!paramsDef || paramsDef.length === 0) return '${1}'
+  return paramsDef.map((p, i) => {
+    const idx = i + 1
+    if (p.type === 'enum' && p.allowedValues && p.allowedValues.length) {
+      const choices = p.allowedValues.map((v) => v.replace(/\s+/g, '_')).join(',')
+      return `"${'${' + idx + '|' + choices + '|}'}"`
+    }
+    if (p.type === 'string') return `"${'${' + idx + ':' + p.name + '}'}"`
+    return `${'${' + idx + ':' + p.name + '}'} `
+  }).join(', ')
+}
+
+const makeCompletionItem = (key: string, def: MacroDefinition, shouldAppendClosing: boolean): vscode.CompletionItem => {
+  const item = new vscode.CompletionItem(key, vscode.CompletionItemKind.Function)
+  item.detail = def.description
+  const params = buildParamsSnippet(def.params)
+  const insertSnippet = shouldAppendClosing ? `${key}(${params})}}` : `${key}(${params})`
+  item.insertText = new vscode.SnippetString(insertSnippet)
+  return item
+}
+
 const completionProvider: vscode.CompletionItemProvider = {
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-    const prefix = document.lineAt(position.line).text.substring(0, position.character)
-    if (!/\{\{\s*$/.test(prefix)) return []
+    if (!shouldTriggerCompletion(document, position)) return []
     const locale = (vscode.env.language || 'en')
     const KNOWN_MACROS = getKnownMacros(locale)
 
-    // Check whether a closing '}}' already exists
-    const offset = document.offsetAt(position)
-    const docText = document.getText()
-    const remaining = docText.substring(offset, Math.min(offset + 16, docText.length))
-    const closingExistsStrict = /^\}\}/.test(remaining)
+    const closingExistsStrict = hasClosingImmediately(document, position)
+    const selectionHasClosing = selectionContainsClosing(document)
 
-    const selection = vscode.window.activeTextEditor?.selection
-    const selectionContainsClosing = !!selection && !selection.isEmpty && document.getText(selection).includes('}}')
+    const entries = Object.entries(KNOWN_MACROS).filter(([, def]) => !def.deprecated)
 
-    return Object.keys(KNOWN_MACROS).map((key) => {
-      const item = new vscode.CompletionItem(key, vscode.CompletionItemKind.Function)
-      item.detail = KNOWN_MACROS[key].description
-      const params = KNOWN_MACROS[key].params ? KNOWN_MACROS[key].params.map((p, i) => {
-        // Use snippet placeholders like ${1:term} and wrap strings in quotes
-        const idx = i + 1
-        if (p.type === 'enum' && p.allowedValues && p.allowedValues.length) {
-          const choices = p.allowedValues.map(v => v.replace(/\s+/g, '_')).join(',')
-          return `\"${'${' + idx + '|' + choices + '|}'}\"`
-        }
-        if (p.type === 'string') {
-          return `\"${'${' + idx + ':' + p.name + '}'}\"`
-        }
-        return `${'${' + idx + ':' + p.name + '}'} `
-      }).join(', ') : '${1}'
-
-      const shouldAppendClosing = !(closingExistsStrict || selectionContainsClosing)
-      const insertSnippet = shouldAppendClosing ? `${key}(${params})}}` : `${key}(${params})`
-      item.insertText = new vscode.SnippetString(insertSnippet)
-      return item
-    })
+    return entries.map(([key, def]) => makeCompletionItem(key, def, !(closingExistsStrict || selectionHasClosing)))
   }
 }
 
