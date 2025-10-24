@@ -6,14 +6,12 @@
 ### Enhancements
 
 * disable macros marked as deprecated on snippet list ([d923024](https://github.com/tristantheb/mdn-macros-syntax/commit/d9230245da1cbbbb8c624089cd907494af4184a5))
-* implement locales for macros hover (`es`, `fr`, `ja`, `ko`, `pt-br`, `ru`, `zh-cn`, `zh-tw`) ([ff07098](https://github.com/tristantheb/mdn-macros-syntax/commit/ff07098a02ba960079905de165c555aff03f2c1b))
 * **locales:** implement locales for macros hover (`es`, `fr`, `ja`, `ko`, `pt-br`, `ru`, `zh-cn`, `zh-tw`) ([#18](https://github.com/tristantheb/mdn-macros-syntax/issues/18)) ([ff07098](https://github.com/tristantheb/mdn-macros-syntax/commit/ff07098a02ba960079905de165c555aff03f2c1b))
 * **snippet:** disable macros marked as deprecated on snippet list ([#16](https://github.com/tristantheb/mdn-macros-syntax/issues/16)) ([d923024](https://github.com/tristantheb/mdn-macros-syntax/commit/d9230245da1cbbbb8c624089cd907494af4184a5))
 
 
 ### Miscellaneous
 
-* change mp4 for gif ([3c9c1d9](https://github.com/tristantheb/mdn-macros-syntax/commit/3c9c1d9785a931846e6116330ace4d32cd2100df))
 * **deps-dev:** bump the development-dependencies group with 4 updates ([#13](https://github.com/tristantheb/mdn-macros-syntax/issues/13)) ([88e04d8](https://github.com/tristantheb/mdn-macros-syntax/commit/88e04d8aeeae0735a376a51b6cdb53d52a93007d))
 * update documentations of extension and macros ([#14](https://github.com/tristantheb/mdn-macros-syntax/issues/14)) ([6da091c](https://github.com/tristantheb/mdn-macros-syntax/commit/6da091c8bf774e9913a553bb48761a7cf6ff7700))
 * update readme to display gif on example ([#17](https://github.com/tristantheb/mdn-macros-syntax/issues/17)) ([3c9c1d9](https://github.com/tristantheb/mdn-macros-syntax/commit/3c9c1d9785a931846e6116330ace4d32cd2100df))
