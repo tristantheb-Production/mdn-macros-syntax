@@ -9,6 +9,7 @@
   "CSSRef": { "description": "Create the sidebar for the CSS category.", "params": {} },
   "CSS_Ref": { "description": "Inserts an index of all CSS properties, selectors, types, functions and at-rules plus their descriptors.", "params": {} },
   "CSSSyntax": { "description": "Displays the formal syntax for a CSS property.", "params": {} },
+  "CSSSyntaxRaw": { "description": "Write a manual syntax of a CSS property.", "params": { "syntax": "The manual syntax to display as a syntax." } },
   "CSSxRef": { "description": "Cross-reference to CSS-related content.", "params": { "property": "The CSS property or at-rule to reference.", "displayText": "Optional display text to show instead of the canonical name.", "anchor": "Optional anchor inside the referenced documentation." } },
   "DefaultAPISidebar": { "description": "API Sidebar for overview pages.", "params": { "apiName": "Optional API name to scope the sidebar to." } },
   "Deprecated_Header": { "description": "Display a banner to warn about deprecated content.", "params": {} },

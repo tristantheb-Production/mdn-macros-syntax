@@ -1,0 +1,6 @@
+{
+  "descriptionKey": "CSSSyntaxRaw",
+  "params": [
+    { "name": "syntax", "type": "string" }
+  ]
+}
