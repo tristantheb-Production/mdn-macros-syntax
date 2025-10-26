@@ -20,7 +20,7 @@ const selectionContainsClosing = (document: vscode.TextDocument): boolean => {
 }
 
 const buildParamsSnippet = (paramsDef: MacroDefinition['params'] | undefined): string => {
-  if (!paramsDef || paramsDef.length === 0) return '${1}'
+  if (!paramsDef || paramsDef.length === 0) return ''
   return paramsDef.map((p, i) => {
     const idx = i + 1
     if (p.type === 'enum' && p.allowedValues && p.allowedValues.length) {
@@ -35,8 +35,11 @@ const buildParamsSnippet = (paramsDef: MacroDefinition['params'] | undefined): s
 const makeCompletionItem = (key: string, def: MacroDefinition, shouldAppendClosing: boolean): vscode.CompletionItem => {
   const item = new vscode.CompletionItem(key, vscode.CompletionItemKind.Function)
   item.detail = def.description
-  const params = buildParamsSnippet(def.params)
-  const insertSnippet = shouldAppendClosing ? `${key}(${params})}}` : `${key}(${params})`
+  const paramsSnippet = buildParamsSnippet(def.params)
+  const hasParams = paramsSnippet.length > 0
+  const insertSnippet = hasParams
+    ? (shouldAppendClosing ? `${key}(${paramsSnippet})}}` : `${key}(${paramsSnippet})`)
+    : (shouldAppendClosing ? `${key}}}` : `${key}`)
   item.insertText = new vscode.SnippetString(insertSnippet)
   return item
 }
