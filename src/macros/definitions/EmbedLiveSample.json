@@ -3,6 +3,11 @@
   "params": [
     { "name": "exampleTitle", "type": "string" },
     { "name": "width", "type": "string-number", "optional": true },
-    { "name": "height", "type": "string-number", "optional": true }
+    { "name": "height", "type": "string-number", "optional": true },
+    { "name": "deprecated_3", "type": "string", "optional": true },
+    { "name": "deprecated_4", "type": "string", "optional": true },
+    { "name": "deprecated_5", "type": "string", "optional": true },
+    { "name": "allowed_features", "type": "string", "optional": true },
+    { "name": "sandbox", "type": "enum", "optional": true, "allowedValues": ["allow-modals", "allow-forms", "allow-popups"] }
   ]
 }
