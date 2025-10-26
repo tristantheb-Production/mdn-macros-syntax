@@ -5,13 +5,11 @@
 
 ### Features
 
-* **macro:** implement CSSSyntaxRaw ([#19](https://github.com/tristantheb/mdn-macros-syntax/issues/19)) ([eec2c35](https://github.com/tristantheb/mdn-macros-syntax/commit/eec2c35a5d315590a33f76152f05ad3975bfe6f6))
+* **macros:** implement CSSSyntaxRaw ([#19](https://github.com/tristantheb/mdn-macros-syntax/issues/19)) ([eec2c35](https://github.com/tristantheb/mdn-macros-syntax/commit/eec2c35a5d315590a33f76152f05ad3975bfe6f6))
 
 
 ### Bug Fixes
 
-* inline macros create empty parentheses ([2b740f0](https://github.com/tristantheb/mdn-macros-syntax/commit/2b740f0c5aba9928313cd8126b524144eeec9df7))
-* **macro:** EmbedLiveSample have missing parameters ([ab7f071](https://github.com/tristantheb/mdn-macros-syntax/commit/ab7f071a9c527a78d77303d4576384af63d9267c))
 * **macros:** EmbedLiveSample have missing parameters ([#21](https://github.com/tristantheb/mdn-macros-syntax/issues/21)) ([ab7f071](https://github.com/tristantheb/mdn-macros-syntax/commit/ab7f071a9c527a78d77303d4576384af63d9267c))
 * **snippets:** inline macros create empty parentheses ([#22](https://github.com/tristantheb/mdn-macros-syntax/issues/22)) ([2b740f0](https://github.com/tristantheb/mdn-macros-syntax/commit/2b740f0c5aba9928313cd8126b524144eeec9df7))
 
