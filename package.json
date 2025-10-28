@@ -1,7 +1,7 @@
 {
   "name": "mdn-macros-syntax",
   "displayName": "%displayName%",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "publisher": "tristantheb",
   "description": "%description%",
   "keywords": [
