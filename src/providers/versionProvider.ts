@@ -1,12 +1,11 @@
 import * as https from 'https'
 import { setTimeout as nodeSetTimeout } from 'timers'
-import * as vscode from 'vscode'
+import { appendLine, LogLevel } from '../utils/output'
 
 type CacheEntry = { sha?: string; ts: number }
 
 const CACHE_TTL = 1000 * 60 * 5 // 5 minutes
 const cache: Record<string, CacheEntry> = {}
-const output = vscode.window.createOutputChannel('mdn-macros')
 
 const pathToGithub = (repoPath: string): string =>
   `https://api.github.com/repos/mdn/content/commits?path=${encodeURIComponent(repoPath)}&per_page=1`
@@ -41,7 +40,7 @@ const fetchOnce = (url: string): Promise<{ status?: number; body: string } | und
       res.on('end', () => resolve({ status: res.statusCode, body }))
     })
     req.on('error', err => {
-      output.appendLine(`[versionProvider] fetchOnce error: ${String(err)}`)
+      appendLine(LogLevel.ERROR, `[versionProvider] fetchOnce error: ${String(err)}`)
       resolve(undefined)
     })
     req.end()
@@ -67,7 +66,7 @@ const fetchWithRetries = async (url: string, attempts = 3): Promise<{ status?: n
       wait *= 2
       continue
     }
-    output.appendLine(`[versionProvider] fetched ${url} -> HTTP ${res.status}`)
+    appendLine(LogLevel.INFO, `[versionProvider] fetched ${url} -> HTTP ${res.status}`)
     return res
   }
   return undefined
@@ -90,13 +89,13 @@ export const getLatestShaForRepoPath = async (repoPath: string): Promise<string 
 
     if (!res) {
       // Final failure (network or retries exhausted)
-      output.appendLine(`[versionProvider] no response for ${url}`)
+      appendLine(LogLevel.WARN, `[versionProvider] no response for ${url}`)
       cache[repoPath] = { sha: undefined, ts: Date.now() }
       return undefined
     }
     if (res.status === 403 || res.status === 429) {
       // Rate-limited or forbidden; record and return undefined
-      output.appendLine(`[versionProvider] ${url} -> HTTP ${res.status}`)
+      appendLine(LogLevel.WARN, `[versionProvider] ${url} -> HTTP ${res.status}`)
       cache[repoPath] = { sha: undefined, ts: Date.now() }
       return undefined
     }
@@ -108,7 +107,7 @@ export const getLatestShaForRepoPath = async (repoPath: string): Promise<string 
     }
 
     // Other statuses
-    output.appendLine(`[versionProvider] unexpected status ${res.status} for ${url}`)
+    appendLine(LogLevel.WARN, `[versionProvider] unexpected status ${res.status} for ${url}`)
     cache[repoPath] = { sha: undefined, ts: Date.now() }
     return undefined
   })()

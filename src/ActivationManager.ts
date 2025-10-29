@@ -8,6 +8,7 @@ import { codeActionProvider } from './providers/codeActionProvider'
 import { completionProvider } from './providers/completionProvider'
 import { provider as semanticProvider, legend as semanticLegend } from './providers/semanticTokensProvider'
 import { DOCUMENT_SELECTOR } from './utils/constants'
+import { initOutput, appendLine, LogLevel } from './utils/output'
 import { isMdnRepo } from './utils/repoDetection'
 
 class ActivationManager {
@@ -19,15 +20,7 @@ class ActivationManager {
   constructor(context: vscode.ExtensionContext, diagnosticCollection?: vscode.DiagnosticCollection) {
     this.context = context
     this.diagnosticCollection = diagnosticCollection
-  }
-
-  /** Ensure we have an OutputChannel and keep a single instance */
-  private getOutput(): vscode.OutputChannel {
-    if (!this.output) {
-      this.output = vscode.window.createOutputChannel('mdn-macros')
-      this.context.subscriptions.push(this.output)
-    }
-    return this.output
+    initOutput(this.context)
   }
 
   /** Public entry to enable features (idempotent). Lazy-loads providers. */
@@ -35,14 +28,14 @@ class ActivationManager {
     if (this.featuresActivated) return
     this.featuresActivated = true
 
-    this.getOutput().appendLine('mdn-macros: enabling features')
+    appendLine(LogLevel.INFO, 'mdn-macros: enabling features')
 
     await this.registerProviders()
     await this.registerComponents()
     try {
       registerHooks(this.context)
     } catch (err) {
-      this.getOutput().appendLine('mdn-macros: failed to register hooks: ' + String(err))
+      appendLine(LogLevel.ERROR, 'mdn-macros: failed to register hooks: ' + String(err))
     }
   }
 
@@ -73,7 +66,7 @@ class ActivationManager {
         )
       )
     } catch (err) {
-      this.getOutput().appendLine('mdn-macros: failed to register providers: ' + String(err))
+      appendLine(LogLevel.ERROR, 'mdn-macros: failed to register providers: ' + String(err))
       console.error(err)
     }
   }
@@ -85,7 +78,7 @@ class ActivationManager {
       activateAllMarkers(this.context)
       activateAllDiagnostics(this.context, this.diagnosticCollection!)
     } catch (err) {
-      this.getOutput().appendLine('mdn-macros: failed to register providers: ' + String(err))
+      appendLine(LogLevel.ERROR, 'mdn-macros: failed to register providers: ' + String(err))
       console.error(err)
     }
   }
@@ -93,13 +86,12 @@ class ActivationManager {
   /** Run detection and (if positive) initialize features */
   public async detectAndInit(): Promise<void> {
     try {
-      const out = this.getOutput()
       const detected = await isMdnRepo()
       if (detected) {
-        out.appendLine('mdn-macros: MDN repo detected — initializing features')
+        appendLine(LogLevel.INFO, 'mdn-macros: MDN repo detected — initializing features')
         await this.initFeatures()
       } else {
-        out.appendLine('mdn-macros: MDN repo not detected — features remain disabled')
+        appendLine(LogLevel.INFO, 'mdn-macros: MDN repo not detected — features remain disabled')
       }
     } catch (err) {
       console.error('mdn-macros: error during repo detection', err)
