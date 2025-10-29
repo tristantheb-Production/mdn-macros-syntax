@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.1](https://github.com/tristantheb/mdn-macros-syntax/compare/v0.3.0...v0.3.1) (2025-10-29)
+
+
+### Enhancements
+
+* **ci:** don't trigger CD/CI for text and yml files ([#28](https://github.com/tristantheb/mdn-macros-syntax/issues/28)) ([15c42be](https://github.com/tristantheb/mdn-macros-syntax/commit/15c42be1624741b0c10f5f30ba6e9b1c50d6a98c))
+* **ci:** removed manual build mode on codeql ([#27](https://github.com/tristantheb/mdn-macros-syntax/issues/27)) ([9c57ab2](https://github.com/tristantheb/mdn-macros-syntax/commit/9c57ab27c0c8ec2fcc9ae8f2ffd7f199e6ae7733))
+
+
+### Bug Fixes
+
+* **fetch:** sha commit request fail without reset ([#24](https://github.com/tristantheb/mdn-macros-syntax/issues/24)) ([5af2db2](https://github.com/tristantheb/mdn-macros-syntax/commit/5af2db2ac73fb6188f42703f0ab8fd7e4851d35e))
+
 ## [0.3.0](https://github.com/tristantheb/mdn-macros-syntax/compare/v0.2.1...v0.3.0) (2025-10-26)
 
 
