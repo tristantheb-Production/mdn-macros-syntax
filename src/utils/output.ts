@@ -12,7 +12,7 @@ const getOutputChannel = (): vscode.OutputChannel => {
   return channel ?? vscode.window.createOutputChannel('mdn-macros')
 }
 
-export enum LogLevel {
+enum LogLevel {
   INFO = 'info',
   WARN = 'warn',
   ERROR = 'error'
