@@ -12,6 +12,10 @@ concurrency:
 on:
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '.github/**'
+      - '**/*.md'
+      - '**/*.txt'
 
 jobs:
   build-and-test:
