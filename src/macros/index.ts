@@ -1,6 +1,7 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import { MacroDefinition, BaseMacroJSON, LocalizedMacroEntry, MacroParam, ParamType } from '../types/macro'
+import { appendLine, LogLevel } from '../utils/output'
 
 /**
  * Load base macro definitions from JSON files.
@@ -8,56 +9,51 @@ import { MacroDefinition, BaseMacroJSON, LocalizedMacroEntry, MacroParam, ParamT
  */
 const loadBaseMacros = (): { [key: string]: Omit<MacroDefinition, 'description'> & { descriptionKey?: string } } => {
   // Resolve path to macro definitions
-  const repoDefs = path.resolve(process.cwd(), 'src', 'macros', 'definitions')
-  const upLevelSrcDefs = path.resolve(__dirname, '..', '..', 'src', 'macros', 'definitions')
-  const packagedDefs = path.resolve(__dirname, 'definitions')
-  let defsDir = ''
+  const repoDefinitionsPath = path.resolve(process.cwd(), 'src', 'macros', 'definitions')
+  const upLevelSourceDefinitionsPath = path.resolve(__dirname, '..', '..', 'src', 'macros', 'definitions')
+  const packagedDefinitionsPath = path.resolve(__dirname, 'definitions')
+  let definitionsDirectory = ''
 
-  // Get definitions directory from possible locations
-  try {
-    if (fs.existsSync(repoDefs)) defsDir = repoDefs
-  } catch { /* ignore */ }
-
-  if (!defsDir) {
+  // Get definitions directory from possible locations (pick first that exists)
+  const candidates = [repoDefinitionsPath, upLevelSourceDefinitionsPath, packagedDefinitionsPath]
+  for (const candidate of candidates) {
     try {
-      if (fs.existsSync(upLevelSrcDefs)) defsDir = upLevelSrcDefs
-    } catch { /* ignore */ }
-  }
-
-  if (!defsDir) {
-    try {
-      if (fs.existsSync(packagedDefs)) defsDir = packagedDefs
+      if (fs.existsSync(candidate)) {
+        definitionsDirectory = candidate
+        break
+      }
     } catch { /* ignore */ }
   }
 
   // Load macro definitions from JSON files in the definitions directory
   const result: { [key: string]: Omit<MacroDefinition, 'description'> & { descriptionKey?: string } } = {}
-  if (!defsDir) return result
+  if (!definitionsDirectory) return result
 
   // Read all .json files in the definitions directory
   try {
-    const files = fs.readdirSync(defsDir).filter(f => f.endsWith('.json'))
+    const files = fs.readdirSync(definitionsDirectory).filter(f => f.endsWith('.json'))
     for (const f of files) {
-      const full = path.join(defsDir, f)
+      const full = path.join(definitionsDirectory, f)
       try {
         const raw = fs.readFileSync(full, 'utf8')
         const parsed = JSON.parse(raw) as BaseMacroJSON
         const name = path.basename(f, '.json')
         if (parsed.params && !Array.isArray(parsed.params)) {
-          console.warn('[mdn-macros] invalid params in', f)
+          appendLine(LogLevel.WARN, `[macros] invalid params in ${f}`)
           continue
         }
         const parsedObj = parsed as unknown as Omit<MacroDefinition, 'description'> & { descriptionKey?: string }
         result[name] = parsedObj
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err)
-        console.log('[mdn-macros] failed to load macro definition', f, msg)
+        appendLine(LogLevel.ERROR, `[macros] failed to load macro definition ${f} ${msg}`)
       }
     }
-    console.log('[mdn-macros] loaded macro definitions from', defsDir, Object.keys(result).length)
+    appendLine(LogLevel.INFO, `[macros] loaded macro definitions from ${definitionsDirectory}`)
+    appendLine(LogLevel.INFO, `[macros] definitions count: ${Object.keys(result).length}`)
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.log('[mdn-macros] error reading macro definitions', msg)
+    appendLine(LogLevel.ERROR, `[macros] error reading macro definitions ${msg}`)
   }
 
   return result
@@ -73,10 +69,6 @@ const loadLocalizedDescriptions = (lang: string): { [key: string]: LocalizedMacr
   const filename = lang === 'en' ? 'macros.nls.json' : `macros.nls.${lang}.json`
   const candidates: string[] = []
 
-  // repository source locations (development)
-  candidates.push(path.resolve(process.cwd(), 'src', 'locales', filename))
-  candidates.push(path.resolve(process.cwd(), 'locales', filename))
-
   // up-level source (when modules are loaded from compiled out/ folder)
   candidates.push(path.resolve(__dirname, '..', '..', 'src', 'locales', filename))
 
@@ -85,14 +77,11 @@ const loadLocalizedDescriptions = (lang: string): { [key: string]: LocalizedMacr
   candidates.push(path.resolve(__dirname, 'locales', filename))
 
   for (const cand of candidates) {
-    try {
-      if (!cand) continue
-      if (fs.existsSync(cand)) {
-        const raw = fs.readFileSync(cand, 'utf8')
-        const parsed = JSON.parse(raw) as { [key: string]: LocalizedMacroEntry }
-        return parsed || {}
-      }
-    } catch { /* ignore */ }
+    if (!!cand && fs.existsSync(cand)) {
+      const raw = fs.readFileSync(cand, 'utf8')
+      const parsed = JSON.parse(raw) as { [key: string]: LocalizedMacroEntry }
+      return parsed || {}
+    }
   }
 
   return {}
