@@ -3,13 +3,20 @@ import * as vscode from 'vscode'
 let channel: vscode.OutputChannel | undefined
 
 const initOutput = (context?: vscode.ExtensionContext): void => {
-  if (channel) return
-  channel = vscode.window.createOutputChannel('mdn-macros')
-  if (context) context.subscriptions.push(channel)
+  if (!channel) {
+    channel = vscode.window.createOutputChannel('MDN Macros')
+  }
+  if (context && channel) {
+    const alreadyRegistered = (context.subscriptions || []).some((d) => d === channel)
+    if (!alreadyRegistered) context.subscriptions.push(channel)
+  }
 }
 
 const getOutputChannel = (): vscode.OutputChannel => {
-  return channel ?? vscode.window.createOutputChannel('mdn-macros')
+  if (!channel) {
+    channel = vscode.window.createOutputChannel('MDN Macros')
+  }
+  return channel
 }
 
 enum LogLevel {
