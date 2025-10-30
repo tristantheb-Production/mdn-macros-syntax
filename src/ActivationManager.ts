@@ -14,7 +14,6 @@ import { isMdnRepo } from './utils/repoDetection'
 class ActivationManager {
   private context: vscode.ExtensionContext
   private featuresActivated = false
-  private output?: vscode.OutputChannel
   private diagnosticCollection?: vscode.DiagnosticCollection
 
   constructor(context: vscode.ExtensionContext, diagnosticCollection?: vscode.DiagnosticCollection) {
@@ -28,14 +27,14 @@ class ActivationManager {
     if (this.featuresActivated) return
     this.featuresActivated = true
 
-    appendLine(LogLevel.INFO, 'mdn-macros: enabling features')
+    appendLine(LogLevel.INFO, '[init] enabling features')
 
     await this.registerProviders()
     await this.registerComponents()
     try {
       registerHooks(this.context)
     } catch (err) {
-      appendLine(LogLevel.ERROR, 'mdn-macros: failed to register hooks: ' + String(err))
+      appendLine(LogLevel.ERROR, '[init] failed to register hooks: ' + String(err))
     }
   }
 
@@ -66,7 +65,7 @@ class ActivationManager {
         )
       )
     } catch (err) {
-      appendLine(LogLevel.ERROR, 'mdn-macros: failed to register providers: ' + String(err))
+      appendLine(LogLevel.ERROR, '[init] failed to register providers: ' + String(err))
       console.error(err)
     }
   }
@@ -78,7 +77,7 @@ class ActivationManager {
       activateAllMarkers(this.context)
       activateAllDiagnostics(this.context, this.diagnosticCollection!)
     } catch (err) {
-      appendLine(LogLevel.ERROR, 'mdn-macros: failed to register providers: ' + String(err))
+      appendLine(LogLevel.ERROR, '[init] failed to register providers: ' + String(err))
       console.error(err)
     }
   }
@@ -88,13 +87,13 @@ class ActivationManager {
     try {
       const detected = await isMdnRepo()
       if (detected) {
-        appendLine(LogLevel.INFO, 'mdn-macros: MDN repo detected — initializing features')
+        appendLine(LogLevel.INFO, '[loader] MDN repo detected — initializing features')
         await this.initFeatures()
       } else {
-        appendLine(LogLevel.INFO, 'mdn-macros: MDN repo not detected — features remain disabled')
+        appendLine(LogLevel.INFO, '[loader] MDN repo not detected — features remain disabled')
       }
     } catch (err) {
-      console.error('mdn-macros: error during repo detection', err)
+      console.error('[loader] error during repo detection', err)
     }
   }
 
