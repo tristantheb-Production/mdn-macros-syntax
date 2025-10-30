@@ -69,6 +69,10 @@ const loadLocalizedDescriptions = (lang: string): { [key: string]: LocalizedMacr
   const filename = lang === 'en' ? 'macros.nls.json' : `macros.nls.${lang}.json`
   const candidates: string[] = []
 
+  // repository source locations (development)
+  candidates.push(path.resolve(process.cwd(), 'src', 'locales', filename))
+  candidates.push(path.resolve(process.cwd(), 'locales', filename))
+
   // up-level source (when modules are loaded from compiled out/ folder)
   candidates.push(path.resolve(__dirname, '..', '..', 'src', 'locales', filename))
 
