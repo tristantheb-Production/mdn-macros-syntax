@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.2](https://github.com/tristantheb/mdn-macros-syntax/compare/v0.3.1...v0.3.2) (2025-10-30)
+
+
+### Enhancements
+
+* **macros:** improve macro logs and code ([#30](https://github.com/tristantheb/mdn-macros-syntax/issues/30)) ([cb267e8](https://github.com/tristantheb/mdn-macros-syntax/commit/cb267e81ca8fe1d7ae1175342eedf6e4ddf12dee))
+
+
+### Bug Fixes
+
+* **main:** mdn macros output duplication ([#29](https://github.com/tristantheb/mdn-macros-syntax/issues/29)) ([f3537a0](https://github.com/tristantheb/mdn-macros-syntax/commit/f3537a0d7098f70b069fc3da77c26eeda8fff4b4))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump `@typescript-eslint/parser` from 8.46.1 to 8.46.2 ([#31](https://github.com/tristantheb/mdn-macros-syntax/issues/31)) ([07291ae](https://github.com/tristantheb/mdn-macros-syntax/commit/07291ae5087253f92cc1cef53a22da0c1517723c))
+
 ## [0.3.1](https://github.com/tristantheb/mdn-macros-syntax/compare/v0.3.0...v0.3.1) (2025-10-29)
 
 
